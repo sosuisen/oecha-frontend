@@ -82,3 +82,24 @@ brush.destroy();           // 焼き込んだら不要
 - ドラッグ中のプレビューは、確定前の点列を別の `Graphics` に `clear()` してから描き直す（命令を常に 1 つに保つ）。`pointerup` で焼き込んでからプレビューを消す。
 - レイヤー方式の選択肢: A. `RenderTexture`（GPU、推奨） / B. Canvas 2D（CPU、ピクセル操作が素直） / C. `Graphics` 蓄積（ベクター画向け、現状）。
 - これは後から変えにくい決定なので、方式を決めたら ADR に記録する候補。
+
+## 追記: テストダブルで描画結果を検証する
+
+「PixiJS のレンダラーは jsdom で動かない」は本当だが、テストしたいのは「アプリがレイヤーに何を描いたか」であって PixiJS のラスタライズではない。描画面を抽象化すれば、描画結果はテストできる。
+
+```ts
+export interface DrawingSurface {
+  strokePolyline(points: Point[], style: StrokeStyle): void;
+}
+```
+
+| 実装 | 動く環境 | ピクセル検証 | 用途 |
+|------|------|------|------|
+| スパイ（呼び出し記録） | 純粋な TS | しない | 「何を描く要求をしたか」の検証 |
+| フェイクのビットマップ（自前の配列 + 簡易ラスタライザ） | 純粋な TS | 自前の規則で可 | 消しゴムや重ね順などのロジック検証 |
+| Canvas 2D（jsdom + `canvas` パッケージ） | jsdom | `getImageData()` で本物の描画結果 | 線幅やアンチエイリアスを含めた検証 |
+| PixiJS `RenderTexture` | 実ブラウザ | `renderer.extract` | 本番。テストは薄いアダプタとして最小限 |
+
+- Canvas 2D の `DrawingSurface` は本番の実装候補（方式 B）にもなる。オフスクリーン canvas に描き、`Texture.from(canvas)` で PixiJS に載せる。テストで検証する実装と本番が同一になる。
+- 方式 A（`RenderTexture`）と B（Canvas 2D）のどちらを本番にするかは、テストのしやすさも含めて判断する。
+- 今の `Layer` は `Graphics` を公開しており PixiJS の型が上位層に漏れている。`Layer` が `DrawingSurface` を実装する（または持つ）形にすると `PenCommand` から PixiJS への依存が消える。
