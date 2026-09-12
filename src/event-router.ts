@@ -1,6 +1,6 @@
 import { Tool } from './tool';
 import { Command } from './command';
-import { StrokeInput } from './stroke-input';
+import { PenCommand } from './pen-command';
 
 export class EventRouter {
   private currentTool: Tool;
@@ -13,7 +13,7 @@ export class EventRouter {
     this.canvas = canvas;
     this.canvas.addEventListener('pointerdown', e => {
       if (this.currentTool === Tool.Pen) {
-        this.currentCommand = new StrokeInput();
+        this.currentCommand = new PenCommand();
         this.currentCommand.onPointerDown(e);
       }
     });

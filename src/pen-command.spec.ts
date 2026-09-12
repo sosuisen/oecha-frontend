@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { StrokeInput } from './stroke-input';
+import { PenCommand } from './pen-command';
 import { EventRouter } from './event-router';
 
 function dispatchStrokeEvent(
@@ -26,8 +26,8 @@ function dispatchStrokeEvent(
 }
 
 // マウスドラッグで線を描く
-describe('StrokeInput', () => {
-  let strokeInput: StrokeInput;
+describe('PenCommand', () => {
+  let penCommand: PenCommand;
   let eventRouter: EventRouter;
   let canvas: HTMLCanvasElement;
 
@@ -36,12 +36,12 @@ describe('StrokeInput', () => {
     canvas.width = 800;
     canvas.height = 600;
     eventRouter = new EventRouter(canvas);
-    strokeInput = new StrokeInput();
+    penCommand = new PenCommand();
   });
 
-  // StrokeInputクラスは点列を記録する
+  // PenCommandクラスは点列を記録する
   it('records the point sequence', () => {
-    expect(strokeInput.getPoints()).toBeInstanceOf(Array);
+    expect(penCommand.getPoints()).toBeInstanceOf(Array);
   });
 
   // マウスダウン、ドラッグ、マウスアップで、点列がストロークコマンドに記録されることを確認する
@@ -54,8 +54,8 @@ describe('StrokeInput', () => {
     ];
     dispatchStrokeEvent(canvas, stroke);
     const command = eventRouter.getCurrentCommand();
-    expect(command).toBeInstanceOf(StrokeInput);
-    if (command instanceof StrokeInput) {
+    expect(command).toBeInstanceOf(PenCommand);
+    if (command instanceof PenCommand) {
       expect(command.getPoints().length).toBe(stroke.length);
     }
   });
@@ -70,8 +70,8 @@ describe('StrokeInput', () => {
     ];
     dispatchStrokeEvent(canvas, stroke1);
     const command1 = eventRouter.getCurrentCommand();
-    expect(command1).toBeInstanceOf(StrokeInput);
-    if (command1 instanceof StrokeInput) {
+    expect(command1).toBeInstanceOf(PenCommand);
+    if (command1 instanceof PenCommand) {
       expect(command1.getPoints().length).toBe(stroke1.length);
       expect(command1.getPoints()[0]).toEqual(stroke1[0]);
     }
@@ -83,8 +83,8 @@ describe('StrokeInput', () => {
     ];
     dispatchStrokeEvent(canvas, stroke2);
     const command2 = eventRouter.getCurrentCommand();
-    expect(command2).toBeInstanceOf(StrokeInput);
-    if (command2 instanceof StrokeInput) {
+    expect(command2).toBeInstanceOf(PenCommand);
+    if (command2 instanceof PenCommand) {
       expect(command2.getPoints().length).toBe(stroke2.length);
       expect(command2.getPoints()[0]).toEqual(stroke2[0]);
     }

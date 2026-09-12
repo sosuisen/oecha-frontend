@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { EventRouter } from './event-router';
 import { Tool } from './tool';
-import { StrokeInput } from './stroke-input';
+import { PenCommand } from './pen-command';
 
 function dispatchStrokeEvent(
   canvas: HTMLCanvasElement,
@@ -60,8 +60,8 @@ describe('Event Router', () => {
     expect(eventRouter.getCurrentTool()).toBe(Tool.Pen);
   });
 
-  // ペンツールが選択されていると、マウスのストロークでStrokeInputオブジェクトが作成される
-  it('creates a StrokeInput object when the pen tool is selected', () => {
+  // ペンツールが選択されていると、マウスのストロークでPenCommandオブジェクトが作成される
+  it('creates a PenCommand object when the pen tool is selected', () => {
     eventRouter.setCurrentTool(Tool.Pen);
     const stroke = [
       { x: 0, y: 0 },
@@ -70,6 +70,6 @@ describe('Event Router', () => {
       { x: 3, y: 3 },
     ];
     dispatchStrokeEvent(canvas, stroke);
-    expect(eventRouter.getCurrentCommand()).toBeInstanceOf(StrokeInput);
+    expect(eventRouter.getCurrentCommand()).toBeInstanceOf(PenCommand);
   });
 });

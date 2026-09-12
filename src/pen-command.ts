@@ -1,6 +1,6 @@
 import { Command } from './command';
 
-export class StrokeInput implements Command {
+export class PenCommand implements Command {
   private points: { x: number; y: number }[] = [];
 
   public getPoints(): { x: number; y: number }[] {
