@@ -1,6 +1,6 @@
-export interface DrawCommand {
-  execute(): void;
-  onPointerDown(event: PointerEvent): void;
-  onPointerMove(event: PointerEvent): void;
-  onPointerUp(event: PointerEvent): void;
+export abstract class DrawCommand {
+  abstract execute(): void;
+  abstract onPointerDown(event: PointerEvent): void;
+  abstract onPointerMove(event: PointerEvent): void;
+  abstract onPointerUp(event: PointerEvent): void;
 }

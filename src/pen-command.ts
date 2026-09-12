@@ -1,6 +1,6 @@
 import { DrawCommand } from './draw-command';
 
-export class PenCommand implements DrawCommand {
+export class PenCommand extends DrawCommand {
   private points: { x: number; y: number }[] = [];
 
   public getPoints(): { x: number; y: number }[] {
