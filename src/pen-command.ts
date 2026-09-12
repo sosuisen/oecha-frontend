@@ -18,6 +18,18 @@ export class PenCommand extends DrawCommand {
   public onPointerUp(): void {}
 
   public execute(): void {
-    // Implement the command execution logic here
+    if (this.points.length === 0) {
+      return;
+    }
+    if (!this.targetLayer) {
+      throw new Error('Target layer is not set.');
+    }
+    const g = this.targetLayer.getGraphics();
+
+    g.moveTo(this.points[0].x, this.points[0].y);
+    for (let i = 1; i < this.points.length; i++) {
+      g.lineTo(this.points[i].x, this.points[i].y);
+    }
+    g.stroke();
   }
 }
