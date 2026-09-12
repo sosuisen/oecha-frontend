@@ -2,20 +2,6 @@ import { Command } from './command';
 
 export class StrokeInput implements Command {
   private points: { x: number; y: number }[] = [];
-  private canvas: HTMLCanvasElement;
-
-  constructor(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
-    this.canvas.addEventListener('pointerdown', e => {
-      this.onPointerDown(e);
-    });
-    this.canvas.addEventListener('pointermove', e => {
-      this.onPointerMove(e);
-    });
-    this.canvas.addEventListener('pointerup', () => {
-      this.onPointerUp();
-    });
-  }
 
   public getPoints(): { x: number; y: number }[] {
     return this.points;

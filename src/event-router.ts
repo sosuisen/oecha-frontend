@@ -13,7 +13,7 @@ export class EventRouter {
     this.canvas = canvas;
     this.canvas.addEventListener('pointerdown', e => {
       if (this.currentTool === Tool.Pen) {
-        this.currentCommand = new StrokeInput(this.canvas);
+        this.currentCommand = new StrokeInput();
         this.currentCommand.onPointerDown(e);
       }
     });
