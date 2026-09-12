@@ -1,12 +1,12 @@
 import { Tool } from './tool';
-import { Command } from './command';
+import { DrawCommand } from './draw-command';
 import { PenCommand } from './pen-command';
 
 export class EventRouter {
   private currentTool: Tool;
   private canvas: HTMLCanvasElement;
   private lastPoint: { x: number; y: number } | null = null;
-  private currentCommand: Command | null = null;
+  private currentCommand: DrawCommand | null = null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.currentTool = Tool.Pen;
@@ -37,7 +37,7 @@ export class EventRouter {
     return this.lastPoint!;
   }
 
-  public getCurrentCommand(): Command | null {
+  public getCurrentCommand(): DrawCommand | null {
     return this.currentCommand;
   }
 
