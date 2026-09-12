@@ -1,12 +1,11 @@
 import { Application } from 'pixi.js';
+import { EventRouter } from './event-router';
 
 (async () => {
-  // Create a new application
   const app = new Application();
-
-  // Initialize the application
   await app.init({ background: '#1099bb', resizeTo: window });
+  document.getElementById('pixi-container')!.appendChild(app.canvas);
 
-  // Listen for animate update
-  app.ticker.add(() => {});
+  const eventRouter = new EventRouter(app.canvas);
+  app.stage.addChild(eventRouter.getCurrentLayer().getGraphics());
 })();

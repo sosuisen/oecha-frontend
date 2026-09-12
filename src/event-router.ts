@@ -41,6 +41,10 @@ export class EventRouter {
     return this.lastPoint!;
   }
 
+  public getCurrentLayer(): Layer {
+    return this.currentLayer;
+  }
+
   public getCurrentCommand(): DrawCommand | null {
     return this.currentCommand;
   }
