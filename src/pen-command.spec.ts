@@ -32,24 +32,35 @@ describe('PenCommand', () => {
   describe('standalone', () => {
     // PenCommandクラスは点列を記録する
     it('records the point sequence', () => {
-      const penCommand = new PenCommand();
+      const penCommand = new PenCommand(new Layer('Layer01'));
       expect(penCommand.getPoints()).toBeInstanceOf(Array);
     });
 
     // 描画対象のレイヤーの名前を返す
     it('returns the correct layer for drawing', () => {
-      const penCommand = new PenCommand();
-      penCommand.setTargetLayer(new Layer('Layer01'));
+      const penCommand = new PenCommand(new Layer('Layer01'));
       expect(penCommand.getTargetLayer()?.getId()).toBe('Layer01');
     });
 
-    // レイヤー未設定で実行すると例外を投げる
-    it('throws an error when executed without a target layer', () => {
-      const penCommand = new PenCommand();
-      penCommand.onPointerDown(
-        new PointerEvent('pointerdown', { clientX: 0, clientY: 0 }),
-      );
-      expect(() => penCommand.execute()).toThrow('Target layer is not set.');
+    // PenCommandのexecute()で描画対象のレイヤーに描画する
+    it('draws on the correct layer', () => {
+      const stroke = [
+        { x: 0, y: 0 },
+        { x: 1, y: 1 },
+        { x: 2, y: 2 },
+        { x: 3, y: 3 },
+      ];
+      const penCommand = new PenCommand(new Layer('Layer01'));
+      stroke.forEach(point => {
+        penCommand.addPoint(point.x, point.y);
+      });
+      penCommand.execute();
+      expect(
+        penCommand.getTargetLayer().getGraphics().getBounds().width,
+      ).toBeGreaterThan(0);
+      expect(
+        penCommand.getTargetLayer().getGraphics().getBounds().height,
+      ).toBeGreaterThan(0);
     });
   });
 
@@ -111,10 +122,8 @@ describe('PenCommand', () => {
       }
     });
 
-    // 描画対象のレイヤーに描画する
-    it('draws on the correct layer', () => {
-      const layer = new Layer('Layer01');
-
+    // pointerupイベントでexecute()が呼ばれる
+    it('calls execute() on pointerup', () => {
       const stroke = [
         { x: 0, y: 0 },
         { x: 1, y: 1 },
@@ -125,10 +134,12 @@ describe('PenCommand', () => {
       const command = eventRouter.getCurrentCommand();
       expect(command).toBeInstanceOf(PenCommand);
       if (command instanceof PenCommand) {
-        command.setTargetLayer(layer);
-        command.execute();
-        expect(layer.getGraphics().getBounds().width).toBeGreaterThan(0);
-        expect(layer.getGraphics().getBounds().height).toBeGreaterThan(0);
+        expect(
+          command.getTargetLayer().getGraphics().getBounds().width,
+        ).toBeGreaterThan(0);
+        expect(
+          command.getTargetLayer().getGraphics().getBounds().height,
+        ).toBeGreaterThan(0);
       }
     });
   });

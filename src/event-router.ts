@@ -1,19 +1,22 @@
 import { Tool } from './tool';
 import { DrawCommand } from './draw-command';
 import { PenCommand } from './pen-command';
+import { Layer } from './layer';
 
 export class EventRouter {
   private currentTool: Tool;
   private canvas: HTMLCanvasElement;
   private lastPoint: { x: number; y: number } | null = null;
   private currentCommand: DrawCommand | null = null;
+  private currentLayer: Layer;
 
   constructor(canvas: HTMLCanvasElement) {
     this.currentTool = Tool.Pen;
+    this.currentLayer = new Layer('Layer01');
     this.canvas = canvas;
     this.canvas.addEventListener('pointerdown', e => {
       if (this.currentTool === Tool.Pen) {
-        this.currentCommand = new PenCommand();
+        this.currentCommand = new PenCommand(this.currentLayer);
         this.currentCommand.onPointerDown(e);
       }
     });
@@ -25,6 +28,7 @@ export class EventRouter {
     this.canvas.addEventListener('pointerup', e => {
       if (this.currentCommand) {
         this.currentCommand.onPointerUp(e);
+        this.currentCommand.execute();
       }
     });
   }

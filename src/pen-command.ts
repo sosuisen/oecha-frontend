@@ -7,6 +7,10 @@ export class PenCommand extends DrawCommand {
     return this.points;
   }
 
+  public addPoint(x: number, y: number): void {
+    this.points.push({ x: x, y: y });
+  }
+
   public onPointerDown(event: PointerEvent): void {
     this.points.push({ x: event.clientX, y: event.clientY });
   }
@@ -20,9 +24,6 @@ export class PenCommand extends DrawCommand {
   public execute(): void {
     if (this.points.length === 0) {
       return;
-    }
-    if (!this.targetLayer) {
-      throw new Error('Target layer is not set.');
     }
     const g = this.targetLayer.getGraphics();
 
