@@ -23,12 +23,14 @@ export class EventRouter {
     this.canvas.addEventListener('pointermove', e => {
       if (this.currentCommand) {
         this.currentCommand.onPointerMove(e);
+        this.currentCommand.execute();
       }
     });
     this.canvas.addEventListener('pointerup', e => {
       if (this.currentCommand) {
         this.currentCommand.onPointerUp(e);
         this.currentCommand.execute();
+        this.currentCommand = null;
       }
     });
   }
