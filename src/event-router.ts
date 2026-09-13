@@ -1,6 +1,7 @@
 import { Tool } from './tool';
 import { DrawCommand } from './draw-command';
 import { PenCommand } from './pen-command';
+import { TextureLayer } from './texture-layer';
 import { Layer } from './layer';
 import { CommandQueue } from './command-queue';
 import { DrawLine } from './draw-line';
@@ -14,7 +15,7 @@ export class EventRouter {
 
   constructor(canvas: HTMLCanvasElement, drawLine: DrawLine) {
     this.currentTool = Tool.Pen;
-    this.currentLayer = new Layer('Layer01');
+    this.currentLayer = new TextureLayer('Layer01');
     this.canvas = canvas;
     this.commandQueue = new CommandQueue();
     this.canvas.addEventListener('pointerdown', e => {

@@ -1,21 +1,23 @@
 import { describe, it, expect } from 'vitest';
 import { DrawCommand } from './draw-command';
-import { Layer } from './layer';
 import { CommandQueue } from './command-queue';
+import { CanvasLayer } from './testing/canvas-layer';
+import { DrawLineOnCanvas } from './testing/draw-line-on-canvas';
 
 function createFakeCommand(
-  layer = new Layer('Layer01'),
+  layer = new CanvasLayer('Layer01'),
   onExecute: () => void = () => {},
 ): DrawCommand {
   return new (class extends DrawCommand {
     execute(): void {
       onExecute();
     }
+    drawNextSegment(): void {}
     addPoint(): void {}
     onPointerDown(): void {}
     onPointerMove(): void {}
     onPointerUp(): void {}
-  })(layer);
+  })(layer, new DrawLineOnCanvas(document.createElement('canvas')));
 }
 
 // CommandQueue のテスト
@@ -47,7 +49,7 @@ describe('CommandQueue', () => {
   it('can execute the current command', () => {
     const queue = new CommandQueue();
     let executed = false;
-    const command1 = createFakeCommand(new Layer('Layer01'), () => {
+    const command1 = createFakeCommand(new CanvasLayer('Layer01'), () => {
       executed = true;
     });
     queue.enqueue(command1);
