@@ -2,6 +2,8 @@ import { DrawCommand } from './draw-command';
 import { Layer } from './layer';
 
 export class EraserCommand implements DrawCommand {
+  static readonly DEFAULT_COLOR: number = 0xffffff;
+
   private targetLayer: Layer;
 
   private points: { x: number; y: number }[] = [];
@@ -11,25 +13,56 @@ export class EraserCommand implements DrawCommand {
     this.targetLayer = layer;
   }
 
-  drawNextSegment(): void {
-    throw new Error('Method not implemented.');
+  public getPoints(): { x: number; y: number }[] {
+    return this.points;
   }
-  execute(): void {
-    throw new Error('Method not implemented.');
+
+  public addPoint(x: number, y: number): void {
+    this.points.push({ x, y });
   }
-  addPoint(x: number, y: number): void {
-    console.log(`EraserCommand.addPoint called with x=${x}, y=${y}`);
-    throw new Error('Method not implemented.');
+
+  public onPointerDown(event: PointerEvent): void {
+    this.points.push({ x: event.clientX, y: event.clientY });
   }
-  onPointerDown(event: PointerEvent): void {
-    console.log(`EraserCommand.onPointerDown called with event: ${event}`);
+
+  public onPointerMove(event: PointerEvent): void {
+    this.points.push({ x: event.clientX, y: event.clientY });
+    this.drawNextSegment();
   }
-  onPointerMove(event: PointerEvent): void {
-    console.log(`EraserCommand.onPointerMove called with event: ${event}`);
-    throw new Error('Method not implemented.');
+
+  public onPointerUp(event: PointerEvent): void {
+    this.points.push({ x: event.clientX, y: event.clientY });
+    this.drawNextSegment();
   }
-  onPointerUp(event: PointerEvent): void {
-    console.log(`EraserCommand.onPointerUp called with event: ${event}`);
-    throw new Error('Method not implemented.');
+
+  public drawNextSegment(): void {
+    if (this.points.length < 2 || this.nextSegment >= this.points.length - 1) {
+      return;
+    }
+    this.targetLayer.drawLine(
+      this.points[this.nextSegment],
+      this.points[this.nextSegment + 1],
+      {
+        blendMode: 'erase',
+        color: EraserCommand.DEFAULT_COLOR,
+      },
+    );
+    this.nextSegment++;
+  }
+
+  /**
+   * Draw all segments of the stroke on the target layer.
+   * It does not change the current segment index.
+   */
+  public execute(): void {
+    if (this.points.length === 0) {
+      return;
+    }
+    for (let i = 0; i < this.points.length - 1; i++) {
+      this.targetLayer.drawLine(this.points[i], this.points[i + 1], {
+        blendMode: 'erase',
+        color: EraserCommand.DEFAULT_COLOR,
+      });
+    }
   }
 }

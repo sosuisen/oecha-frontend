@@ -1,6 +1,6 @@
 import { PointData } from 'pixi.js';
 import { Layer } from './layer';
-import { DrawLine } from './draw-line';
+import { DrawLine, DrawOptions } from './draw-line';
 
 export class TextureLayer implements Layer {
   private id: string;
@@ -15,7 +15,11 @@ export class TextureLayer implements Layer {
     return this.id;
   }
 
-  public drawLine(from: PointData, to: PointData, color: number): void {
-    this.drawLineDelegate.draw(from, to, { blendMode: 'normal', color });
+  public drawLine(
+    from: PointData,
+    to: PointData,
+    drawOptions: DrawOptions,
+  ): void {
+    this.drawLineDelegate.draw(from, to, drawOptions);
   }
 }

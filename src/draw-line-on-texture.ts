@@ -1,6 +1,7 @@
 import { DrawLine, DrawOptions } from './draw-line';
 import {
   Application,
+  Container,
   RenderTexture,
   Graphics,
   BLEND_MODES,
@@ -11,6 +12,10 @@ export class DrawLineOnTexture implements DrawLine {
   private app: Application;
   private texture: RenderTexture;
 
+  // renderer.render() ignores the blendMode of the container it receives,
+  // so the brush is drawn as a child of this parent.
+  private scene = new Container();
+
   constructor(app: Application, texture: RenderTexture) {
     this.app = app;
     this.texture = texture;
@@ -18,6 +23,7 @@ export class DrawLineOnTexture implements DrawLine {
 
   public draw(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
     const lineWidth = 2;
+
     let brush: Graphics;
     let color = drawOptions.color;
 
@@ -36,16 +42,19 @@ export class DrawLineOnTexture implements DrawLine {
       brush = new Graphics()
         .moveTo(p1.x, p1.y)
         .lineTo(p2.x, p2.y)
-        .stroke({ width: lineWidth, color });
+        .stroke({ width: lineWidth, color, cap: 'round' });
     }
-    brush.blendMode = blendMode;
+
+    this.scene.addChild(brush);
+    brush.blendMode = blendMode; // blendMode must be set to child node.
 
     this.app.renderer.render({
-      container: brush,
+      container: this.scene,
       target: this.texture,
       clear: false,
     });
 
+    this.scene.removeChild(brush);
     brush.destroy();
   }
 }

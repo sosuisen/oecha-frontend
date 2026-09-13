@@ -1,11 +1,12 @@
 import { Application, RenderTexture, Sprite } from 'pixi.js';
 import { EventRouter } from './event-router';
 import { DrawLineOnTexture } from './draw-line-on-texture';
+import { DEFAULT_BACKGROUND_COLOR } from './background';
 
 (async () => {
   const app = new Application();
   await app.init({
-    background: '#1099bb',
+    background: DEFAULT_BACKGROUND_COLOR,
     resizeTo: window,
   });
 

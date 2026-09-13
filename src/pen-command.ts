@@ -44,7 +44,10 @@ export class PenCommand implements DrawCommand {
     this.targetLayer.drawLine(
       this.points[this.nextSegment],
       this.points[this.nextSegment + 1],
-      PenCommand.DEFAULT_COLOR,
+      {
+        blendMode: 'normal',
+        color: PenCommand.DEFAULT_COLOR,
+      },
     );
     this.nextSegment++;
   }
@@ -58,11 +61,10 @@ export class PenCommand implements DrawCommand {
       return;
     }
     for (let i = 0; i < this.points.length - 1; i++) {
-      this.targetLayer.drawLine(
-        this.points[i],
-        this.points[i + 1],
-        PenCommand.DEFAULT_COLOR,
-      );
+      this.targetLayer.drawLine(this.points[i], this.points[i + 1], {
+        blendMode: 'normal',
+        color: PenCommand.DEFAULT_COLOR,
+      });
     }
   }
 }
