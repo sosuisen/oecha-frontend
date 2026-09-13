@@ -1,6 +1,16 @@
 import { DrawCommand } from './draw-command';
+import { Layer } from './layer';
 
 export class EraserCommand implements DrawCommand {
+  private targetLayer: Layer;
+
+  private points: { x: number; y: number }[] = [];
+  private nextSegment: number = 0;
+
+  constructor(layer: Layer) {
+    this.targetLayer = layer;
+  }
+
   drawNextSegment(): void {
     throw new Error('Method not implemented.');
   }
@@ -13,7 +23,6 @@ export class EraserCommand implements DrawCommand {
   }
   onPointerDown(event: PointerEvent): void {
     console.log(`EraserCommand.onPointerDown called with event: ${event}`);
-    throw new Error('Method not implemented.');
   }
   onPointerMove(event: PointerEvent): void {
     console.log(`EraserCommand.onPointerMove called with event: ${event}`);

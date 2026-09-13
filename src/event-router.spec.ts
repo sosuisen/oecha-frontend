@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { EventRouter } from './event-router';
 import { Tool } from './tool';
 import { PenCommand } from './pen-command';
+import { EraserCommand } from './eraser-command';
 import { DrawLineOnCanvas } from './testing/draw-line-on-canvas';
 
 interface Point {
@@ -133,6 +134,16 @@ describe('EventRouter', () => {
       const [r3, g3, b3] = imageData3.data;
       const color3 = (r3 << 16) | (g3 << 8) | b3;
       expect(color3).toBe(0x000000); // no line drawn at this point
+    });
+  });
+
+  // 消しゴムツールでのストローク
+  describe('stroke with the eraser tool', () => {
+    // 消しゴムツールが選択されていると、pointerdownイベントで EraserCommand が作成される
+    it('creates an EraserCommand for each pointerdown event when the eraser tool is selected', () => {
+      eventRouter.setCurrentTool(Tool.Eraser);
+      canvas.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
+      expect(eventRouter.getCurrentCommand()).toBeInstanceOf(EraserCommand);
     });
   });
 });
