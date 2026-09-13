@@ -62,6 +62,16 @@ describe('EventRouter', () => {
       eventRouter.setCurrentTool(Tool.Pen);
       expect(eventRouter.getCurrentTool()).toBe(Tool.Pen);
     });
+
+    // Xキーを押すたびに、ペンツールと消しゴムツールが切り替わる
+    it('toggles between the pen and eraser tools when the X key is pressed', () => {
+      expect(eventRouter.getCurrentTool()).toBe(Tool.Pen);
+      const xKeyEvent = new KeyboardEvent('keydown', { key: 'x' });
+      window.dispatchEvent(xKeyEvent);
+      expect(eventRouter.getCurrentTool()).toBe(Tool.Eraser);
+      window.dispatchEvent(xKeyEvent);
+      expect(eventRouter.getCurrentTool()).toBe(Tool.Pen);
+    });
   });
 
   // ペンツールでのストローク

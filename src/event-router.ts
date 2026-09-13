@@ -38,6 +38,16 @@ export class EventRouter {
         this.commandQueue.advance();
       }
     });
+    window.addEventListener('keydown', e => {
+      if (e.repeat) {
+        return;
+      }
+      if (e.key === 'x' || e.key === 'X') {
+        this.currentTool =
+          this.currentTool === Tool.Pen ? Tool.Eraser : Tool.Pen;
+        console.log(`Tool toggled to: ${this.currentTool}`);
+      }
+    });
   }
 
   public onPointerDown(event: PointerEvent): void {
