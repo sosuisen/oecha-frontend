@@ -1,10 +1,20 @@
 import { DrawCommand } from './draw-command';
+import { Layer } from './layer';
 
-export class PenCommand extends DrawCommand {
+export class PenCommand implements DrawCommand {
   static readonly DEFAULT_COLOR: number = 0xff8000;
+  private targetLayer: Layer;
 
   private points: { x: number; y: number }[] = [];
   private nextSegment: number = 0;
+
+  constructor(layer: Layer) {
+    this.targetLayer = layer;
+  }
+
+  public getTargetLayer(): Layer {
+    return this.targetLayer;
+  }
 
   public getPoints(): { x: number; y: number }[] {
     return this.points;

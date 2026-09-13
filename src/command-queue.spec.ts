@@ -11,16 +11,15 @@ function createFakeCommand(
   ),
   onExecute: () => void = () => {},
 ): DrawCommand {
-  return new (class extends DrawCommand {
-    execute(): void {
-      onExecute();
-    }
-    drawNextSegment(): void {}
-    addPoint(): void {}
-    onPointerDown(): void {}
-    onPointerMove(): void {}
-    onPointerUp(): void {}
-  })(layer);
+  return {
+    getTargetLayer: () => layer,
+    drawNextSegment: () => {},
+    execute: onExecute,
+    addPoint: () => {},
+    onPointerDown: () => {},
+    onPointerMove: () => {},
+    onPointerUp: () => {},
+  };
 }
 
 // CommandQueue のテスト
