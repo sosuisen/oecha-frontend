@@ -4,7 +4,13 @@ import { DrawLineOnTexture } from './draw-line-on-texture';
 
 (async () => {
   const app = new Application();
-  await app.init({ background: '#1099bb', resizeTo: window });
+  await app.init({
+    background: '#1099bb',
+    resizeTo: window,
+  });
+
+  console.log(app.renderer.name); // 'webgl' or 'webgpu'
+
   document.getElementById('pixi-container')!.appendChild(app.canvas);
 
   // 1. レイヤーの実体。GPU 上のピクセルバッファ
@@ -18,5 +24,4 @@ import { DrawLineOnTexture } from './draw-line-on-texture';
   app.stage.addChild(layerSprite);
 
   new EventRouter(app.canvas, new DrawLineOnTexture(app, renderTexture));
-  // app.stage.addChild(eventRouter.getCurrentLayer().getGraphics());
 })();
