@@ -4,7 +4,7 @@ export class PenCommand extends DrawCommand {
   static readonly DEFAULT_COLOR: number = 0xff8000;
 
   private points: { x: number; y: number }[] = [];
-  private currentSegment: number = 0;
+  private nextSegment: number = 0;
 
   public getPoints(): { x: number; y: number }[] {
     return this.points;
@@ -24,31 +24,35 @@ export class PenCommand extends DrawCommand {
 
   public onPointerUp(): void {}
 
+  /**
+   * Draw the next segment of the stroke
+   */
   public drawNextSegment(): void {
-    if (
-      this.points.length < 2 ||
-      this.currentSegment >= this.points.length - 1
-    ) {
+    if (this.points.length < 2 || this.nextSegment >= this.points.length - 1) {
       return;
     }
     this.drawLine.draw(
-      this.points[this.currentSegment],
-      this.points[this.currentSegment + 1],
+      this.points[this.nextSegment],
+      this.points[this.nextSegment + 1],
       PenCommand.DEFAULT_COLOR,
     );
-    this.currentSegment++;
+    this.nextSegment++;
   }
 
+  /**
+   * Draw all segments of the stroke on the target layer.
+   * It does not change the current segment index.
+   */
   public execute(): void {
     if (this.points.length === 0) {
       return;
     }
-    const g = this.targetLayer.getGraphics();
-
-    g.moveTo(this.points[0].x, this.points[0].y);
-    for (let i = 1; i < this.points.length; i++) {
-      g.lineTo(this.points[i].x, this.points[i].y);
+    for (let i = 0; i < this.points.length - 1; i++) {
+      this.drawLine.draw(
+        this.points[i],
+        this.points[i + 1],
+        PenCommand.DEFAULT_COLOR,
+      );
     }
-    g.stroke();
   }
 }

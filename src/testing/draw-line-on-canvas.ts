@@ -7,8 +7,8 @@ export class DrawLineOnCanvas implements DrawLine {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
 
-  constructor(canvas?: HTMLCanvasElement) {
-    this.canvas = canvas || document.createElement('canvas');
+  constructor(canvas: HTMLCanvasElement) {
+    this.canvas = canvas;
     const ctx = this.canvas.getContext('2d');
     if (!ctx) {
       throw new Error('Failed to get 2D context from texture');
@@ -23,9 +23,6 @@ export class DrawLineOnCanvas implements DrawLine {
    * @param color - 24-bit integer (0x000000 to 0xFFFFFF)
    */
   public draw(p1: Point, p2: Point, color: number): void {
-    this.canvas.width = Math.max(p1.x, p2.x) + 1;
-    this.canvas.height = Math.max(p1.y, p2.y) + 1;
-
     this.ctx.beginPath();
     this.ctx.moveTo(p1.x + 0.5, p1.y + 0.5);
     this.ctx.lineTo(p2.x + 0.5, p2.y + 0.5);

@@ -9,7 +9,7 @@ describe('PenCommand', () => {
   it('starts with an empty point sequence', () => {
     const penCommand = new PenCommand(
       new Layer('Layer01'),
-      new DrawLineOnCanvas(),
+      new DrawLineOnCanvas(document.createElement('canvas')),
     );
     expect(penCommand.getPoints()).toEqual([]);
   });
@@ -17,26 +17,47 @@ describe('PenCommand', () => {
   // コンストラクタで渡したレイヤーを描画対象として返す
   it('returns the layer given to the constructor as the target', () => {
     const layer = new Layer('Layer01');
-    const penCommand = new PenCommand(layer, new DrawLineOnCanvas());
+    const penCommand = new PenCommand(
+      layer,
+      new DrawLineOnCanvas(document.createElement('canvas')),
+    );
     expect(penCommand.getTargetLayer()).toBe(layer);
   });
 
   // execute() すると、点列が描画対象のレイヤーに描かれる
   it('draws the points on the target layer when executed', () => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d')!;
+    ctx.canvas.width = 20;
+    ctx.canvas.height = 20;
+
     const stroke = [
       { x: 0, y: 0 },
       { x: 1, y: 1 },
       { x: 2, y: 2 },
-      { x: 3, y: 3 },
     ];
     const layer = new Layer('Layer01');
-    const penCommand = new PenCommand(layer, new DrawLineOnCanvas());
+    const penCommand = new PenCommand(layer, new DrawLineOnCanvas(canvas));
     stroke.forEach(point => {
       penCommand.addPoint(point.x, point.y);
     });
+
     penCommand.execute();
-    expect(layer.getGraphics().getBounds().width).toBeGreaterThan(0);
-    expect(layer.getGraphics().getBounds().height).toBeGreaterThan(0);
+
+    const imageData = canvas.getContext('2d')!.getImageData(0, 0, 1, 1);
+    const [r1, g1, b1] = imageData.data;
+    const color1 = (r1 << 16) | (g1 << 8) | b1;
+    expect(color1).toBe(PenCommand.DEFAULT_COLOR);
+
+    const imageData2 = canvas.getContext('2d')!.getImageData(1, 1, 1, 1);
+    const [r2, g2, b2] = imageData2.data;
+    const color2 = (r2 << 16) | (g2 << 8) | b2;
+    expect(color2).toBe(PenCommand.DEFAULT_COLOR);
+
+    const imageData3 = canvas.getContext('2d')!.getImageData(2, 2, 1, 1);
+    const [r3, g3, b3] = imageData3.data;
+    const color3 = (r3 << 16) | (g3 << 8) | b3;
+    expect(color3).toBe(PenCommand.DEFAULT_COLOR);
   });
 
   // drawNextSegment() は、2点間の線分を描画する
