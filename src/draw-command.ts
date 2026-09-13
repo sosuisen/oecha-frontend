@@ -10,6 +10,7 @@ export abstract class DrawCommand {
   public getTargetLayer(): Layer {
     return this.targetLayer;
   }
+  abstract drawNextSegment(): void;
   abstract execute(): void;
   abstract addPoint(x: number, y: number): void;
   abstract onPointerDown(event: PointerEvent): void;

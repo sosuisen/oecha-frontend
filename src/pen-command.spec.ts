@@ -34,4 +34,15 @@ describe('PenCommand', () => {
     expect(layer.getGraphics().getBounds().width).toBeGreaterThan(0);
     expect(layer.getGraphics().getBounds().height).toBeGreaterThan(0);
   });
+
+  // drawNextSegment() は、2点間の線分を描画する
+  it('draws a line segment between the last two points when drawNextSegment is called', () => {
+    const layer = new Layer('Layer01');
+    const penCommand = new PenCommand(layer);
+    penCommand.addPoint(0, 0);
+    penCommand.addPoint(10, 10);
+    penCommand.drawNextSegment();
+    expect(layer.getGraphics().getBounds().width).toBeGreaterThan(0);
+    expect(layer.getGraphics().getBounds().height).toBeGreaterThan(0);
+  });
 });
