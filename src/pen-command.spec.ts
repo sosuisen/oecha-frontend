@@ -8,7 +8,10 @@ describe('PenCommand', () => {
   // 生成直後の点列は空である
   it('starts with an empty point sequence', () => {
     const penCommand = new PenCommand(
-      new CanvasLayer('Layer01'),
+      new CanvasLayer(
+        'Layer01',
+        new DrawLineOnCanvas(document.createElement('canvas')),
+      ),
       new DrawLineOnCanvas(document.createElement('canvas')),
     );
     expect(penCommand.getPoints()).toEqual([]);
@@ -16,7 +19,10 @@ describe('PenCommand', () => {
 
   // コンストラクタで渡したレイヤーを描画対象として返す
   it('returns the layer given to the constructor as the target', () => {
-    const layer = new CanvasLayer('Layer01');
+    const layer = new CanvasLayer(
+      'Layer01',
+      new DrawLineOnCanvas(document.createElement('canvas')),
+    );
     const penCommand = new PenCommand(
       layer,
       new DrawLineOnCanvas(document.createElement('canvas')),
@@ -36,7 +42,7 @@ describe('PenCommand', () => {
       { x: 1, y: 1 },
       { x: 2, y: 2 },
     ];
-    const layer = new CanvasLayer('Layer01');
+    const layer = new CanvasLayer('Layer01', new DrawLineOnCanvas(canvas));
     const penCommand = new PenCommand(layer, new DrawLineOnCanvas(canvas));
     stroke.forEach(point => {
       penCommand.addPoint(point.x, point.y);
@@ -62,8 +68,8 @@ describe('PenCommand', () => {
 
   // drawNextSegment() は、2点間の線分を描画する
   it('draws a line segment between the last two points when drawNextSegment is called', () => {
-    const layer = new CanvasLayer('Layer01');
     const canvas = document.createElement('canvas');
+    const layer = new CanvasLayer('Layer01', new DrawLineOnCanvas(canvas));
     const ctx = canvas.getContext('2d')!;
     ctx.canvas.width = 20;
     ctx.canvas.height = 20;

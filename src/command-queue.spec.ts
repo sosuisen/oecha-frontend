@@ -5,7 +5,10 @@ import { CanvasLayer } from './testing/canvas-layer';
 import { DrawLineOnCanvas } from './testing/draw-line-on-canvas';
 
 function createFakeCommand(
-  layer = new CanvasLayer('Layer01'),
+  layer = new CanvasLayer(
+    'Layer01',
+    new DrawLineOnCanvas(document.createElement('canvas')),
+  ),
   onExecute: () => void = () => {},
 ): DrawCommand {
   return new (class extends DrawCommand {
@@ -49,9 +52,15 @@ describe('CommandQueue', () => {
   it('can execute the current command', () => {
     const queue = new CommandQueue();
     let executed = false;
-    const command1 = createFakeCommand(new CanvasLayer('Layer01'), () => {
-      executed = true;
-    });
+    const command1 = createFakeCommand(
+      new CanvasLayer(
+        'Layer01',
+        new DrawLineOnCanvas(document.createElement('canvas')),
+      ),
+      () => {
+        executed = true;
+      },
+    );
     queue.enqueue(command1);
     queue.step();
     expect(executed).toBe(true);

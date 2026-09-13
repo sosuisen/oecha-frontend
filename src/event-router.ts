@@ -15,7 +15,7 @@ export class EventRouter {
 
   constructor(canvas: HTMLCanvasElement, drawLine: DrawLine) {
     this.currentTool = Tool.Pen;
-    this.currentLayer = new TextureLayer('Layer01');
+    this.currentLayer = new TextureLayer('Layer01', drawLine);
     this.canvas = canvas;
     this.commandQueue = new CommandQueue();
     this.canvas.addEventListener('pointerdown', e => {
