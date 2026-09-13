@@ -98,4 +98,16 @@ describe('PenCommand', () => {
     const color = (r << 16) | (g << 8) | b;
     expect(color).toBe(PenCommand.DEFAULT_COLOR);
   });
+
+  // ペンのサイズをセット、ゲットできる
+  it('has a size property', () => {
+    const penCommand = new PenCommand(
+      new CanvasLayer(
+        'Layer01',
+        new DrawLineOnCanvas(document.createElement('canvas')),
+      ),
+    );
+    penCommand.setSize(10);
+    expect(penCommand.getSize()).toBe(10);
+  });
 });

@@ -8,12 +8,22 @@ export class PenCommand implements DrawCommand {
   private points: { x: number; y: number }[] = [];
   private nextSegment: number = 0;
 
+  private size: number = 2;
+
   constructor(layer: Layer) {
     this.targetLayer = layer;
   }
 
   public getPoints(): { x: number; y: number }[] {
     return this.points;
+  }
+
+  public setSize(size: number): void {
+    this.size = size;
+  }
+
+  public getSize(): number {
+    return this.size;
   }
 
   public addPoint(x: number, y: number): void {
@@ -47,6 +57,7 @@ export class PenCommand implements DrawCommand {
       {
         blendMode: 'normal',
         color: PenCommand.DEFAULT_COLOR,
+        size: this.size,
       },
     );
     this.nextSegment++;
@@ -64,6 +75,7 @@ export class PenCommand implements DrawCommand {
       this.targetLayer.drawLine(this.points[i], this.points[i + 1], {
         blendMode: 'normal',
         color: PenCommand.DEFAULT_COLOR,
+        size: this.size,
       });
     }
   }

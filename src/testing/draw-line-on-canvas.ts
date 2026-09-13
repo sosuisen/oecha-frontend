@@ -22,7 +22,7 @@ export class DrawLineOnCanvas implements DrawLine {
    * @param drawOptions - Options for drawing the line
    */
   public draw(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
-    const lineWidth = 2;
+    const lineWidth = drawOptions.size;
     let color = drawOptions.color;
     if (drawOptions.blendMode === 'erase') {
       color = 0xffffff;

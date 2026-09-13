@@ -10,6 +10,8 @@ function createFakeCommand(onExecute: () => void = () => {}): DrawCommand {
     onPointerDown: () => {},
     onPointerMove: () => {},
     onPointerUp: () => {},
+    setSize: () => {},
+    getSize: () => 0,
   };
 }
 

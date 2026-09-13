@@ -43,4 +43,16 @@ describe('EraserCommand', () => {
     const [, , , a2] = imageData2.data;
     expect(a2).toBe(255);
   });
+
+  // 消しゴムのサイズをセット、ゲットできる
+  it('has a size property', () => {
+    const eraserCommand = new EraserCommand(
+      new CanvasLayer(
+        'Layer01',
+        new DrawLineOnCanvas(document.createElement('canvas')),
+      ),
+    );
+    eraserCommand.setSize(10);
+    expect(eraserCommand.getSize()).toBe(10);
+  });
 });

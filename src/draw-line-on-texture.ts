@@ -22,7 +22,7 @@ export class DrawLineOnTexture implements DrawLine {
   }
 
   public draw(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
-    const lineWidth = 2;
+    const lineWidth = drawOptions.size;
 
     let brush: Graphics;
     let color = drawOptions.color;

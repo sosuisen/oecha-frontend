@@ -8,7 +8,7 @@ describe('drawLineOnCanvas', () => {
     drawLine.draw(
       { x: 0, y: 0 },
       { x: 10, y: 10 },
-      { blendMode: 'normal', color: 0xff0000 },
+      { blendMode: 'normal', color: 0xff0000, size: 1 },
     );
     const color1: number = drawLine.getPixel(0, 0);
     expect(color1).toBe(0xff0000);
@@ -22,7 +22,7 @@ describe('drawLineOnCanvas', () => {
     drawLine.draw(
       { x: 0, y: 0 },
       { x: 10, y: 10 },
-      { blendMode: 'normal', color: 0xff0000 },
+      { blendMode: 'normal', color: 0xff0000, size: 1 },
     );
     const color1: number = drawLine.getPixel(0, 0);
     expect(color1).toBe(0xff0000);
