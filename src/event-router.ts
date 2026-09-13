@@ -2,35 +2,37 @@ import { Tool } from './tool';
 import { DrawCommand } from './draw-command';
 import { PenCommand } from './pen-command';
 import { Layer } from './layer';
+import { CommandQueue } from './command-queue';
 
 export class EventRouter {
   private currentTool: Tool;
   private canvas: HTMLCanvasElement;
   private lastPoint: { x: number; y: number } | null = null;
-  private currentCommand: DrawCommand | null = null;
   private currentLayer: Layer;
+  private commandQueue: CommandQueue;
 
   constructor(canvas: HTMLCanvasElement) {
     this.currentTool = Tool.Pen;
     this.currentLayer = new Layer('Layer01');
     this.canvas = canvas;
+    this.commandQueue = new CommandQueue();
     this.canvas.addEventListener('pointerdown', e => {
       if (this.currentTool === Tool.Pen) {
-        this.currentCommand = new PenCommand(this.currentLayer);
-        this.currentCommand.onPointerDown(e);
+        this.commandQueue.enqueue(new PenCommand(this.currentLayer));
+        this.commandQueue.currentCommand()?.onPointerDown(e);
       }
     });
     this.canvas.addEventListener('pointermove', e => {
-      if (this.currentCommand) {
-        this.currentCommand.onPointerMove(e);
-        this.currentCommand.execute();
+      if (this.commandQueue.currentCommand()) {
+        this.commandQueue.currentCommand()?.onPointerMove(e);
+        this.commandQueue.currentCommand()?.execute();
       }
     });
     this.canvas.addEventListener('pointerup', e => {
-      if (this.currentCommand) {
-        this.currentCommand.onPointerUp(e);
-        this.currentCommand.execute();
-        this.currentCommand = null;
+      if (this.commandQueue.currentCommand()) {
+        this.commandQueue.currentCommand()?.onPointerUp(e);
+        this.commandQueue.currentCommand()?.execute();
+        this.commandQueue.advance();
       }
     });
   }
@@ -48,7 +50,7 @@ export class EventRouter {
   }
 
   public getCurrentCommand(): DrawCommand | null {
-    return this.currentCommand;
+    return this.commandQueue.currentCommand();
   }
 
   public getCurrentTool(): Tool {
