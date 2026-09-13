@@ -2,7 +2,7 @@ import { DrawCommand } from './draw-command';
 import { Layer } from './layer';
 
 export class PenCommand implements DrawCommand {
-  static readonly DEFAULT_COLOR: number = 0xff8000;
+  static readonly DEFAULT_COLOR: number = 0xff00ff;
   private targetLayer: Layer;
 
   private points: { x: number; y: number }[] = [];
@@ -21,7 +21,7 @@ export class PenCommand implements DrawCommand {
   }
 
   public addPoint(x: number, y: number): void {
-    this.points.push({ x: x, y: y });
+    this.points.push({ x, y });
   }
 
   public onPointerDown(event: PointerEvent): void {
@@ -30,9 +30,13 @@ export class PenCommand implements DrawCommand {
 
   public onPointerMove(event: PointerEvent): void {
     this.points.push({ x: event.clientX, y: event.clientY });
+    this.drawNextSegment();
   }
 
-  public onPointerUp(): void {}
+  public onPointerUp(event: PointerEvent): void {
+    this.points.push({ x: event.clientX, y: event.clientY });
+    this.drawNextSegment();
+  }
 
   /**
    * Draw the next segment of the stroke

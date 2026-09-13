@@ -15,11 +15,19 @@ export class DrawLineOnTexture implements DrawLine {
     p2: { x: number; y: number },
     color: number,
   ): void {
-    const brush = new Graphics()
-      .moveTo(p1.x, p1.y)
-      .lineTo(p2.x, p2.y)
-      .stroke({ width: 2, color });
-
+    const lineWidth = 2;
+    let brush: Graphics;
+    if (p1.x === p2.x && p1.y === p2.y) {
+      brush = new Graphics()
+        .moveTo(p1.x, p1.y)
+        .circle(p1.x, p1.y, lineWidth / 2)
+        .fill({ color });
+    } else {
+      brush = new Graphics()
+        .moveTo(p1.x, p1.y)
+        .lineTo(p2.x, p2.y)
+        .stroke({ width: lineWidth, color });
+    }
     this.app.renderer.render({
       container: brush,
       target: this.texture,

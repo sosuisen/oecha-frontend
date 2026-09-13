@@ -27,13 +27,11 @@ export class EventRouter {
     this.canvas.addEventListener('pointermove', e => {
       if (this.commandQueue.currentCommand()) {
         this.commandQueue.currentCommand()?.onPointerMove(e);
-        this.commandQueue.currentCommand()?.drawNextSegment();
       }
     });
     this.canvas.addEventListener('pointerup', e => {
       if (this.commandQueue.currentCommand()) {
         this.commandQueue.currentCommand()?.onPointerUp(e);
-        this.commandQueue.currentCommand()?.drawNextSegment();
         this.commandQueue.advance();
       }
     });

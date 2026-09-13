@@ -89,4 +89,23 @@ describe('PenCommand', () => {
     const color3 = (r3 << 16) | (g3 << 8) | b3;
     expect(color3).toBe(0x000000); // no line drawn at this point
   });
+
+  // 始点と終点が同じ場合は点が描画される
+  it('draws a point when the start and end points are the same', () => {
+    const canvas = document.createElement('canvas');
+    const layer = new CanvasLayer('Layer01', new DrawLineOnCanvas(canvas));
+    const ctx = canvas.getContext('2d')!;
+    ctx.canvas.width = 20;
+    ctx.canvas.height = 20;
+
+    const penCommand = new PenCommand(layer);
+    penCommand.addPoint(5, 5);
+    penCommand.addPoint(5, 5);
+    penCommand.drawNextSegment();
+
+    const imageData = canvas.getContext('2d')!.getImageData(5, 5, 1, 1);
+    const [r, g, b] = imageData.data;
+    const color = (r << 16) | (g << 8) | b;
+    expect(color).toBe(PenCommand.DEFAULT_COLOR);
+  });
 });
