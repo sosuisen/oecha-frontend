@@ -1,13 +1,14 @@
 import { getCssRgb } from '../color-utils';
+import { DrawLine } from '../draw-line';
 
 type Point = { x: number; y: number };
 
-export class DrawLineOnCanvas {
+export class DrawLineOnCanvas implements DrawLine {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
 
-  constructor() {
-    this.canvas = document.createElement('canvas');
+  constructor(canvas?: HTMLCanvasElement) {
+    this.canvas = canvas || document.createElement('canvas');
     const ctx = this.canvas.getContext('2d');
     if (!ctx) {
       throw new Error('Failed to get 2D context from texture');

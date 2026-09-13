@@ -1,6 +1,8 @@
 import { DrawCommand } from './draw-command';
 
 export class PenCommand extends DrawCommand {
+  static readonly DEFAULT_COLOR: number = 0xff8000;
+
   private points: { x: number; y: number }[] = [];
   private currentSegment: number = 0;
 
@@ -29,12 +31,11 @@ export class PenCommand extends DrawCommand {
     ) {
       return;
     }
-    const g = this.targetLayer.getGraphics();
-    const p1 = this.points[this.currentSegment];
-    const p2 = this.points[this.currentSegment + 1];
-    g.moveTo(p1.x, p1.y);
-    g.lineTo(p2.x, p2.y);
-    g.stroke();
+    this.drawLine.draw(
+      this.points[this.currentSegment],
+      this.points[this.currentSegment + 1],
+      PenCommand.DEFAULT_COLOR,
+    );
     this.currentSegment++;
   }
 

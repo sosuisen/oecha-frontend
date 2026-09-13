@@ -1,10 +1,13 @@
 import { Layer } from './layer';
+import { DrawLine } from './draw-line';
 
 export abstract class DrawCommand {
   protected targetLayer: Layer;
+  protected drawLine: DrawLine;
 
-  constructor(layer: Layer) {
+  constructor(layer: Layer, drawLine: DrawLine) {
     this.targetLayer = layer;
+    this.drawLine = drawLine;
   }
 
   public getTargetLayer(): Layer {

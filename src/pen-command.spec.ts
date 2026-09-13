@@ -1,19 +1,23 @@
 import { describe, it, expect } from 'vitest';
 import { PenCommand } from './pen-command';
 import { Layer } from './layer';
+import { DrawLineOnCanvas } from './testing/draw-line-on-canvas';
 
 // マウスドラッグで線を描く
 describe('PenCommand', () => {
   // 生成直後の点列は空である
   it('starts with an empty point sequence', () => {
-    const penCommand = new PenCommand(new Layer('Layer01'));
+    const penCommand = new PenCommand(
+      new Layer('Layer01'),
+      new DrawLineOnCanvas(),
+    );
     expect(penCommand.getPoints()).toEqual([]);
   });
 
   // コンストラクタで渡したレイヤーを描画対象として返す
   it('returns the layer given to the constructor as the target', () => {
     const layer = new Layer('Layer01');
-    const penCommand = new PenCommand(layer);
+    const penCommand = new PenCommand(layer, new DrawLineOnCanvas());
     expect(penCommand.getTargetLayer()).toBe(layer);
   });
 
@@ -26,7 +30,7 @@ describe('PenCommand', () => {
       { x: 3, y: 3 },
     ];
     const layer = new Layer('Layer01');
-    const penCommand = new PenCommand(layer);
+    const penCommand = new PenCommand(layer, new DrawLineOnCanvas());
     stroke.forEach(point => {
       penCommand.addPoint(point.x, point.y);
     });
@@ -38,11 +42,28 @@ describe('PenCommand', () => {
   // drawNextSegment() は、2点間の線分を描画する
   it('draws a line segment between the last two points when drawNextSegment is called', () => {
     const layer = new Layer('Layer01');
-    const penCommand = new PenCommand(layer);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d')!;
+    ctx.canvas.width = 20;
+    ctx.canvas.height = 20;
+
+    const penCommand = new PenCommand(layer, new DrawLineOnCanvas(canvas));
     penCommand.addPoint(0, 0);
     penCommand.addPoint(10, 10);
     penCommand.drawNextSegment();
-    expect(layer.getGraphics().getBounds().width).toBeGreaterThan(0);
-    expect(layer.getGraphics().getBounds().height).toBeGreaterThan(0);
+    const imageData = canvas.getContext('2d')!.getImageData(0, 0, 1, 1);
+    const [r1, g1, b1] = imageData.data;
+    const color1 = (r1 << 16) | (g1 << 8) | b1;
+    expect(color1).toBe(PenCommand.DEFAULT_COLOR);
+
+    const imageData2 = canvas.getContext('2d')!.getImageData(10, 10, 1, 1);
+    const [r2, g2, b2] = imageData2.data;
+    const color2 = (r2 << 16) | (g2 << 8) | b2;
+    expect(color2).toBe(PenCommand.DEFAULT_COLOR);
+
+    const imageData3 = canvas.getContext('2d')!.getImageData(0, 5, 1, 1);
+    const [r3, g3, b3] = imageData3.data;
+    const color3 = (r3 << 16) | (g3 << 8) | b3;
+    expect(color3).toBe(0x000000); // no line drawn at this point
   });
 });

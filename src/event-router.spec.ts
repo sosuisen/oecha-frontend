@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { EventRouter } from './event-router';
 import { Tool } from './tool';
 import { PenCommand } from './pen-command';
+import { DrawLineOnCanvas } from './testing/draw-line-on-canvas';
 
 interface Point {
   x: number;
@@ -28,16 +29,6 @@ function createPointerEvent(type: string, point: Point): Event {
   return mouseEvent;
 }
 
-// canvas に対して pointerdown → pointermove... → pointerup を順に発火し、1 ストロークを再現する
-function dispatchStrokeEvent(canvas: HTMLCanvasElement, stroke: Point[]): void {
-  canvas.dispatchEvent(createPointerEvent('pointerdown', stroke[0]));
-  stroke.slice(1).forEach(point => {
-    canvas.dispatchEvent(createPointerEvent('pointermove', point));
-  });
-  const last = stroke[stroke.length - 1];
-  canvas.dispatchEvent(createPointerEvent('pointerup', last));
-}
-
 // EventRouter はツールの選択状態を持ち、ポインターイベントをコマンドへ振り分ける
 describe('EventRouter', () => {
   let canvas: HTMLCanvasElement;
@@ -47,7 +38,7 @@ describe('EventRouter', () => {
     canvas = document.createElement('canvas');
     canvas.width = 800;
     canvas.height = 600;
-    eventRouter = new EventRouter(canvas);
+    eventRouter = new EventRouter(canvas, new DrawLineOnCanvas(canvas));
   });
 
   // ツールの選択
@@ -121,16 +112,27 @@ describe('EventRouter', () => {
         new PointerEvent('pointerdown', { clientX: 0, clientY: 0 }),
       );
       canvas.dispatchEvent(
-        new PointerEvent('pointermove', { clientX: 3, clientY: 3 }),
+        new PointerEvent('pointermove', { clientX: 10, clientY: 10 }),
       );
       const command = eventRouter.getCurrentCommand();
       expect(command).toBeInstanceOf(PenCommand);
       if (!(command instanceof PenCommand)) {
         return;
       }
-      const graphics = command.getTargetLayer().getGraphics();
-      expect(graphics.getBounds().width).toBeGreaterThan(0);
-      expect(graphics.getBounds().height).toBeGreaterThan(0);
+      const imageData = canvas.getContext('2d')!.getImageData(0, 0, 1, 1);
+      const [r1, g1, b1] = imageData.data;
+      const color1 = (r1 << 16) | (g1 << 8) | b1;
+      expect(color1).toBe(PenCommand.DEFAULT_COLOR);
+
+      const imageData2 = canvas.getContext('2d')!.getImageData(10, 10, 1, 1);
+      const [r2, g2, b2] = imageData2.data;
+      const color2 = (r2 << 16) | (g2 << 8) | b2;
+      expect(color2).toBe(PenCommand.DEFAULT_COLOR);
+
+      const imageData3 = canvas.getContext('2d')!.getImageData(0, 5, 1, 1);
+      const [r3, g3, b3] = imageData3.data;
+      const color3 = (r3 << 16) | (g3 << 8) | b3;
+      expect(color3).toBe(0x000000); // no line drawn at this point
     });
   });
 });

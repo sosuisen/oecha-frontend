@@ -3,6 +3,7 @@ import { DrawCommand } from './draw-command';
 import { PenCommand } from './pen-command';
 import { Layer } from './layer';
 import { CommandQueue } from './command-queue';
+import { DrawLine } from './draw-line';
 
 export class EventRouter {
   private currentTool: Tool;
@@ -11,14 +12,14 @@ export class EventRouter {
   private currentLayer: Layer;
   private commandQueue: CommandQueue;
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(canvas: HTMLCanvasElement, drawLine: DrawLine) {
     this.currentTool = Tool.Pen;
     this.currentLayer = new Layer('Layer01');
     this.canvas = canvas;
     this.commandQueue = new CommandQueue();
     this.canvas.addEventListener('pointerdown', e => {
       if (this.currentTool === Tool.Pen) {
-        this.commandQueue.enqueue(new PenCommand(this.currentLayer));
+        this.commandQueue.enqueue(new PenCommand(this.currentLayer, drawLine));
         this.commandQueue.currentCommand()?.onPointerDown(e);
       }
     });
