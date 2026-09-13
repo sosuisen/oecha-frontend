@@ -20,7 +20,7 @@ function createFakeCommand(
     onPointerDown(): void {}
     onPointerMove(): void {}
     onPointerUp(): void {}
-  })(layer, new DrawLineOnCanvas(document.createElement('canvas')));
+  })(layer);
 }
 
 // CommandQueue のテスト

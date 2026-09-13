@@ -31,7 +31,7 @@ export class PenCommand extends DrawCommand {
     if (this.points.length < 2 || this.nextSegment >= this.points.length - 1) {
       return;
     }
-    this.drawLine.draw(
+    this.targetLayer.drawLine(
       this.points[this.nextSegment],
       this.points[this.nextSegment + 1],
       PenCommand.DEFAULT_COLOR,
@@ -48,7 +48,7 @@ export class PenCommand extends DrawCommand {
       return;
     }
     for (let i = 0; i < this.points.length - 1; i++) {
-      this.drawLine.draw(
+      this.targetLayer.drawLine(
         this.points[i],
         this.points[i + 1],
         PenCommand.DEFAULT_COLOR,

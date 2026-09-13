@@ -20,7 +20,7 @@ export class EventRouter {
     this.commandQueue = new CommandQueue();
     this.canvas.addEventListener('pointerdown', e => {
       if (this.currentTool === Tool.Pen) {
-        this.commandQueue.enqueue(new PenCommand(this.currentLayer, drawLine));
+        this.commandQueue.enqueue(new PenCommand(this.currentLayer));
         this.commandQueue.currentCommand()?.onPointerDown(e);
       }
     });

@@ -12,7 +12,6 @@ describe('PenCommand', () => {
         'Layer01',
         new DrawLineOnCanvas(document.createElement('canvas')),
       ),
-      new DrawLineOnCanvas(document.createElement('canvas')),
     );
     expect(penCommand.getPoints()).toEqual([]);
   });
@@ -23,10 +22,7 @@ describe('PenCommand', () => {
       'Layer01',
       new DrawLineOnCanvas(document.createElement('canvas')),
     );
-    const penCommand = new PenCommand(
-      layer,
-      new DrawLineOnCanvas(document.createElement('canvas')),
-    );
+    const penCommand = new PenCommand(layer);
     expect(penCommand.getTargetLayer()).toBe(layer);
   });
 
@@ -43,7 +39,7 @@ describe('PenCommand', () => {
       { x: 2, y: 2 },
     ];
     const layer = new CanvasLayer('Layer01', new DrawLineOnCanvas(canvas));
-    const penCommand = new PenCommand(layer, new DrawLineOnCanvas(canvas));
+    const penCommand = new PenCommand(layer);
     stroke.forEach(point => {
       penCommand.addPoint(point.x, point.y);
     });
@@ -74,7 +70,7 @@ describe('PenCommand', () => {
     ctx.canvas.width = 20;
     ctx.canvas.height = 20;
 
-    const penCommand = new PenCommand(layer, new DrawLineOnCanvas(canvas));
+    const penCommand = new PenCommand(layer);
     penCommand.addPoint(0, 0);
     penCommand.addPoint(10, 10);
     penCommand.drawNextSegment();
