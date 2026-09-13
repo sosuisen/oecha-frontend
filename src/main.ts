@@ -17,9 +17,6 @@ import { DrawLineOnTexture } from './draw-line-on-texture';
   const layerSprite = new Sprite(renderTexture);
   app.stage.addChild(layerSprite);
 
-  const eventRouter = new EventRouter(
-    app.canvas,
-    new DrawLineOnTexture(app, renderTexture),
-  );
-  app.stage.addChild(eventRouter.getCurrentLayer().getGraphics());
+  new EventRouter(app.canvas, new DrawLineOnTexture(app, renderTexture));
+  // app.stage.addChild(eventRouter.getCurrentLayer().getGraphics());
 })();
