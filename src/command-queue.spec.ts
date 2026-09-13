@@ -1,18 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { DrawCommand } from './draw-command';
 import { CommandQueue } from './command-queue';
-import { CanvasLayer } from './testing/canvas-layer';
-import { DrawLineOnCanvas } from './testing/draw-line-on-canvas';
 
-function createFakeCommand(
-  layer = new CanvasLayer(
-    'Layer01',
-    new DrawLineOnCanvas(document.createElement('canvas')),
-  ),
-  onExecute: () => void = () => {},
-): DrawCommand {
+function createFakeCommand(onExecute: () => void = () => {}): DrawCommand {
   return {
-    getTargetLayer: () => layer,
     drawNextSegment: () => {},
     execute: onExecute,
     addPoint: () => {},
@@ -51,15 +42,9 @@ describe('CommandQueue', () => {
   it('can execute the current command', () => {
     const queue = new CommandQueue();
     let executed = false;
-    const command1 = createFakeCommand(
-      new CanvasLayer(
-        'Layer01',
-        new DrawLineOnCanvas(document.createElement('canvas')),
-      ),
-      () => {
-        executed = true;
-      },
-    );
+    const command1 = createFakeCommand(() => {
+      executed = true;
+    });
     queue.enqueue(command1);
     queue.step();
     expect(executed).toBe(true);

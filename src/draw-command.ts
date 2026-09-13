@@ -1,7 +1,4 @@
-import { Layer } from './layer';
-
 export interface DrawCommand {
-  getTargetLayer(): Layer;
   drawNextSegment(): void;
   execute(): void;
   addPoint(x: number, y: number): void;

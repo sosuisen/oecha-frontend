@@ -14,6 +14,6 @@ export class CanvasLayer implements Layer {
     return this.id;
   }
   public drawLine(from: PointData, to: PointData, color: number): void {
-    this.drawLineDelegate.draw(from, to, color);
+    this.drawLineDelegate.draw(from, to, { blendMode: 'normal', color });
   }
 }

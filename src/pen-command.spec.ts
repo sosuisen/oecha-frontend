@@ -16,16 +16,6 @@ describe('PenCommand', () => {
     expect(penCommand.getPoints()).toEqual([]);
   });
 
-  // コンストラクタで渡したレイヤーを描画対象として返す
-  it('returns the layer given to the constructor as the target', () => {
-    const layer = new CanvasLayer(
-      'Layer01',
-      new DrawLineOnCanvas(document.createElement('canvas')),
-    );
-    const penCommand = new PenCommand(layer);
-    expect(penCommand.getTargetLayer()).toBe(layer);
-  });
-
   // execute() すると、点列が描画対象のレイヤーに描かれる
   it('draws the points on the target layer when executed', () => {
     const canvas = document.createElement('canvas');

@@ -16,6 +16,6 @@ export class TextureLayer implements Layer {
   }
 
   public drawLine(from: PointData, to: PointData, color: number): void {
-    this.drawLineDelegate.draw(from, to, color);
+    this.drawLineDelegate.draw(from, to, { blendMode: 'normal', color });
   }
 }

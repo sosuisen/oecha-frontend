@@ -12,10 +12,6 @@ export class PenCommand implements DrawCommand {
     this.targetLayer = layer;
   }
 
-  public getTargetLayer(): Layer {
-    return this.targetLayer;
-  }
-
   public getPoints(): { x: number; y: number }[] {
     return this.points;
   }
