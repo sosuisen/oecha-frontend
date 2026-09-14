@@ -1,6 +1,6 @@
 import { Container, Text } from 'pixi.js';
-import { ToolState } from './tool-state';
-import { ToolId } from './tool-id';
+import { ToolState } from '../tool/tool-state';
+import { ToolId } from '../tool/tool-id';
 
 export class Info {
   private readonly root: Container;

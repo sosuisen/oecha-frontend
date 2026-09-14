@@ -1,7 +1,7 @@
 import { ToolId } from './tool-id';
 import { SizeSettings } from './size-settings';
-import { DrawCommand } from './draw-command';
-import { Layer } from './layer';
+import { DrawCommand } from '../command/draw-command';
+import { Layer } from '../layer/layer';
 
 export interface Tool {
   readonly id: ToolId;

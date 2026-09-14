@@ -1,6 +1,6 @@
 import { SizeSettings } from './size-settings';
-import { PenCommand } from './pen-command';
-import { Layer } from './layer';
+import { PenCommand } from '../command/pen-command';
+import { Layer } from '../layer/layer';
 import { Tool } from './tool';
 import { ToolId } from './tool-id';
 

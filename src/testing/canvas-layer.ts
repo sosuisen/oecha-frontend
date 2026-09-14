@@ -1,5 +1,5 @@
-import { Layer } from '../layer';
-import { DrawLine, DrawOptions } from '../draw-line';
+import { Layer } from '../layer/layer';
+import { DrawLine, DrawOptions } from '../layer/draw-line';
 import { PointData } from 'pixi.js';
 
 export class CanvasLayer implements Layer {

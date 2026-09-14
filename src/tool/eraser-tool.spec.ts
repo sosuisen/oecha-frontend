@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { EraserTool } from './eraser-tool';
 import { SizeSettings } from './size-settings';
-import { EraserCommand } from './eraser-command';
-import { Layer } from './layer';
+import { EraserCommand } from '../command/eraser-command';
+import { Layer } from '../layer/layer';
 
 describe('eraser-tool', () => {
   // 消しゴムツールはサイズ設定を持っている

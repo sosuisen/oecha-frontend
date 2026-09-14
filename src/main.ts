@@ -1,9 +1,9 @@
 import { Application, Container, RenderTexture, Sprite } from 'pixi.js';
-import { EventRouter } from './event-router';
-import { DrawLineOnTexture } from './draw-line-on-texture';
-import { DEFAULT_BACKGROUND_COLOR } from './background';
-import { Info } from './info';
-import { ToolState } from './tool-state';
+import { EventRouter } from './ui/event-router';
+import { DrawLineOnTexture } from './layer/draw-line-on-texture';
+import { DEFAULT_BACKGROUND_COLOR } from './ui/background';
+import { Info } from './ui/info';
+import { ToolState } from './tool/tool-state';
 
 (async () => {
   const app = new Application();

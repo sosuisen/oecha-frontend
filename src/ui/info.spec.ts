@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { Container, Text } from 'pixi.js';
 import { Info } from './info';
-import { ToolState } from './tool-state';
-import { ToolId } from './tool-id';
+import { ToolState } from '../tool/tool-state';
+import { ToolId } from '../tool/tool-id';
 
 // Test suite for the info module
 describe('info', () => {

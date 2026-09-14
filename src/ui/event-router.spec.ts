@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { EventRouter } from './event-router';
-import { ToolId } from './tool-id';
-import { PenCommand } from './pen-command';
-import { EraserCommand } from './eraser-command';
-import { DrawLineOnCanvas } from './testing/draw-line-on-canvas';
-import { ToolState } from './tool-state';
+import { ToolId } from '../tool/tool-id';
+import { PenCommand } from '../command/pen-command';
+import { EraserCommand } from '../command/eraser-command';
+import { DrawLineOnCanvas } from '../testing/draw-line-on-canvas';
+import { ToolState } from '../tool/tool-state';
 
 interface Point {
   x: number;

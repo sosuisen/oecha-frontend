@@ -1,5 +1,5 @@
-import { getCssRgb } from '../color-utils';
-import { DrawLine, DrawOptions } from '../draw-line';
+import { getCssRgb } from '../util/color-utils';
+import { DrawLine, DrawOptions } from '../layer/draw-line';
 import { PointData } from 'pixi.js';
 
 export class DrawLineOnCanvas implements DrawLine {

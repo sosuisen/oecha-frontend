@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { TextureLayer } from './texture-layer';
-import { DrawLineOnCanvas } from './testing/draw-line-on-canvas';
+import { DrawLineOnCanvas } from '../testing/draw-line-on-canvas';
 
 // レイヤーのテスト
 describe('Layer', () => {

@@ -1,13 +1,13 @@
 import { DrawCommand } from './draw-command';
-import { Layer } from './layer';
+import { Layer } from '../layer/layer';
 
-export class EraserCommand implements DrawCommand {
-  static readonly DEFAULT_COLOR: number = 0xffffff;
-
+export class PenCommand implements DrawCommand {
+  static readonly DEFAULT_COLOR: number = 0xff00ff;
   private readonly targetLayer: Layer;
 
   private readonly points: { x: number; y: number }[] = [];
   private nextSegment: number = 0;
+
   private size: number = 1;
 
   constructor(layer: Layer) {
@@ -44,6 +44,9 @@ export class EraserCommand implements DrawCommand {
     this.drawNextSegment();
   }
 
+  /**
+   * Draw the next segment of the stroke
+   */
   drawNextSegment(): void {
     if (this.points.length < 2 || this.nextSegment >= this.points.length - 1) {
       return;
@@ -52,8 +55,8 @@ export class EraserCommand implements DrawCommand {
       this.points[this.nextSegment],
       this.points[this.nextSegment + 1],
       {
-        blendMode: 'erase',
-        color: EraserCommand.DEFAULT_COLOR,
+        blendMode: 'normal',
+        color: PenCommand.DEFAULT_COLOR,
         size: this.size,
       },
     );
@@ -70,8 +73,8 @@ export class EraserCommand implements DrawCommand {
     }
     for (let i = 0; i < this.points.length - 1; i++) {
       this.targetLayer.drawLine(this.points[i], this.points[i + 1], {
-        blendMode: 'erase',
-        color: EraserCommand.DEFAULT_COLOR,
+        blendMode: 'normal',
+        color: PenCommand.DEFAULT_COLOR,
         size: this.size,
       });
     }

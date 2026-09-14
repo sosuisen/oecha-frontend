@@ -2,8 +2,8 @@ import { describe, it, expect, expectTypeOf } from 'vitest';
 import { EraserCommand } from './eraser-command';
 import { DrawCommand } from './draw-command';
 import { PenCommand } from './pen-command';
-import { CanvasLayer } from './testing/canvas-layer';
-import { DrawLineOnCanvas } from './testing/draw-line-on-canvas';
+import { CanvasLayer } from '../testing/canvas-layer';
+import { DrawLineOnCanvas } from '../testing/draw-line-on-canvas';
 
 // EraserCommand のテスト
 describe('EraserCommand', () => {

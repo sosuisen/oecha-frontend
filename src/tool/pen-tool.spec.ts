@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { PenTool } from './pen-tool';
 import { SizeSettings } from './size-settings';
-import { PenCommand } from './pen-command';
-import { Layer } from './layer';
+import { PenCommand } from '../command/pen-command';
+import { Layer } from '../layer/layer';
 
 describe('pen-tool', () => {
   // ペンツールはサイズ設定を持っている

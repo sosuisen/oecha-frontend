@@ -1,6 +1,6 @@
 import { SizeSettings } from './size-settings';
-import { EraserCommand } from './eraser-command';
-import { Layer } from './layer';
+import { EraserCommand } from '../command/eraser-command';
+import { Layer } from '../layer/layer';
 import { Tool } from './tool';
 import { ToolId } from './tool-id';
 

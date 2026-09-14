@@ -1,10 +1,10 @@
-import { ToolId } from './tool-id';
-import { DrawCommand } from './draw-command';
-import { TextureLayer } from './texture-layer';
-import { Layer } from './layer';
-import { CommandQueue } from './command-queue';
-import { DrawLine } from './draw-line';
-import { ToolState } from './tool-state';
+import { ToolId } from '../tool/tool-id';
+import { DrawCommand } from '../command/draw-command';
+import { TextureLayer } from '../layer/texture-layer';
+import { Layer } from '../layer/layer';
+import { CommandQueue } from '../command/command-queue';
+import { DrawLine } from '../layer/draw-line';
+import { ToolState } from '../tool/tool-state';
 
 export class EventRouter {
   private readonly canvas: HTMLCanvasElement;
