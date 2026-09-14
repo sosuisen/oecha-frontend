@@ -1,7 +1,5 @@
 import { ToolId } from './tool-id';
 import { DrawCommand } from './draw-command';
-import { PenCommand } from './pen-command';
-import { EraserCommand } from './eraser-command';
 import { TextureLayer } from './texture-layer';
 import { Layer } from './layer';
 import { CommandQueue } from './command-queue';
@@ -25,12 +23,10 @@ export class EventRouter {
     this.commandQueue = new CommandQueue();
     this.toolState = toolState;
     this.canvas.addEventListener('pointerdown', e => {
-      if (this.toolState.get() === ToolId.Pen) {
-        this.commandQueue.enqueue(new PenCommand(this.currentLayer));
-      } else if (this.toolState.get() === ToolId.Eraser) {
-        this.commandQueue.enqueue(new EraserCommand(this.currentLayer));
-      }
-      this.commandQueue.currentCommand()?.onPointerDown(e);
+      const currentTool = this.toolState.getCurrentTool();
+      const command = currentTool.createCommand(this.currentLayer);
+      this.commandQueue.enqueue(command);
+      command.onPointerDown(e);
     });
     this.canvas.addEventListener('pointermove', e => {
       if (this.commandQueue.currentCommand()) {
