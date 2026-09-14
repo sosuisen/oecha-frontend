@@ -1,7 +1,9 @@
-import { Application, RenderTexture, Sprite } from 'pixi.js';
+import { Application, Container, RenderTexture, Sprite } from 'pixi.js';
 import { EventRouter } from './event-router';
 import { DrawLineOnTexture } from './draw-line-on-texture';
 import { DEFAULT_BACKGROUND_COLOR } from './background';
+import { Info } from './info';
+import { ToolState } from './tool-state';
 
 (async () => {
   const app = new Application();
@@ -24,5 +26,15 @@ import { DEFAULT_BACKGROUND_COLOR } from './background';
   const layerSprite = new Sprite(renderTexture);
   app.stage.addChild(layerSprite);
 
-  new EventRouter(app.canvas, new DrawLineOnTexture(app, renderTexture));
+  const infoContainer = new Container();
+  app.stage.addChild(infoContainer);
+  const info = new Info(infoContainer);
+  info.show();
+
+  const toolState = new ToolState();
+  new EventRouter(
+    app.canvas,
+    new DrawLineOnTexture(app, renderTexture),
+    toolState,
+  );
 })();

@@ -4,6 +4,7 @@ import { Tool } from './tool';
 import { PenCommand } from './pen-command';
 import { EraserCommand } from './eraser-command';
 import { DrawLineOnCanvas } from './testing/draw-line-on-canvas';
+import { ToolState } from './tool-state';
 
 interface Point {
   x: number;
@@ -39,31 +40,16 @@ describe('EventRouter', () => {
     canvas = document.createElement('canvas');
     canvas.width = 800;
     canvas.height = 600;
-    eventRouter = new EventRouter(canvas, new DrawLineOnCanvas(canvas));
+    eventRouter = new EventRouter(
+      canvas,
+      new DrawLineOnCanvas(canvas),
+      new ToolState(),
+    );
   });
 
   // ツールの選択
   describe('tool selection', () => {
-    // 初期状態ではペンツールが選択されている
-    it('selects the pen tool by default', () => {
-      expect(eventRouter.getCurrentTool()).toBe(Tool.Pen);
-    });
-
-    // 消しゴムツールに切り替えられる
-    it('switches to the eraser tool', () => {
-      eventRouter.setCurrentTool(Tool.Eraser);
-      expect(eventRouter.getCurrentTool()).toBe(Tool.Eraser);
-    });
-
-    // 消しゴムツールに切り替えた後、ペンツールに戻せる
-    it('switches back to the pen tool after selecting the eraser tool', () => {
-      eventRouter.setCurrentTool(Tool.Eraser);
-      expect(eventRouter.getCurrentTool()).toBe(Tool.Eraser);
-      eventRouter.setCurrentTool(Tool.Pen);
-      expect(eventRouter.getCurrentTool()).toBe(Tool.Pen);
-    });
-
-    // Xキーを押すたびに、ペンツールと消しゴムツールが切り替わる
+    // Xキーを押すたびに、ペンツールと消しゴムツールがトグルする。
     it('toggles between the pen and eraser tools when the X key is pressed', () => {
       expect(eventRouter.getCurrentTool()).toBe(Tool.Pen);
       const xKeyEvent = new KeyboardEvent('keydown', { key: 'x' });
@@ -72,15 +58,31 @@ describe('EventRouter', () => {
       window.dispatchEvent(xKeyEvent);
       expect(eventRouter.getCurrentTool()).toBe(Tool.Pen);
     });
+
+    // ツールをトグルすると、ToolStateのchangeイベントが発火する
+    it('emits a change event when the tool is switched', () => {
+      const c = document.createElement('canvas');
+      const toolState = new ToolState();
+      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      let invoked = false;
+      toolState.on('change', () => (invoked = true));
+      const xKeyEvent = new KeyboardEvent('keydown', { key: 'x' });
+      window.dispatchEvent(xKeyEvent);
+      expect(invoked).toBe(true);
+    });
   });
 
   // ペンツールでのストローク
   describe('stroke with the pen tool', () => {
     // ペンツールが選択されていると、pointerdownイベントで PenCommand が作成される
     it('creates a PenCommand for each pointerdown event when the pen tool is selected', () => {
-      eventRouter.setCurrentTool(Tool.Pen);
-      canvas.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
-      expect(eventRouter.getCurrentCommand()).toBeInstanceOf(PenCommand);
+      const c = document.createElement('canvas');
+      const toolState = new ToolState();
+      toolState.set(Tool.Pen);
+      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      const router = new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      c.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
+      expect(router.getCurrentCommand()).toBeInstanceOf(PenCommand);
     });
 
     // ドラッグすると、点列が PenCommand に記録される
@@ -151,9 +153,13 @@ describe('EventRouter', () => {
   describe('stroke with the eraser tool', () => {
     // 消しゴムツールが選択されていると、pointerdownイベントで EraserCommand が作成される
     it('creates an EraserCommand for each pointerdown event when the eraser tool is selected', () => {
-      eventRouter.setCurrentTool(Tool.Eraser);
-      canvas.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
-      expect(eventRouter.getCurrentCommand()).toBeInstanceOf(EraserCommand);
+      const c = document.createElement('canvas');
+      const toolState = new ToolState();
+      toolState.set(Tool.Eraser);
+      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      const router = new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      c.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
+      expect(router.getCurrentCommand()).toBeInstanceOf(EraserCommand);
     });
   });
 });

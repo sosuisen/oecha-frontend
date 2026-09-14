@@ -3,14 +3,27 @@ import { ToolState } from './tool-state';
 import { Tool } from './tool';
 
 describe('ToolState', () => {
-  // 値をセット、取得できる
-  it('should be able to set and get the value', () => {
+  // 初期状態ではペンツールが選択されている
+  it('should have the pen tool selected by default', () => {
+    const toolState = new ToolState();
+    expect(toolState.get()).toBe(Tool.Pen);
+  });
+
+  // ペンツールに切り替えられる
+  it('switches to the pen tool', () => {
     const toolState = new ToolState();
     toolState.set(Tool.Pen);
     expect(toolState.get()).toBe(Tool.Pen);
   });
 
-  // 値をトグルできる
+  // 消しゴムツールに切り替えられる
+  it('switches to the eraser tool', () => {
+    const toolState = new ToolState();
+    toolState.set(Tool.Eraser);
+    expect(toolState.get()).toBe(Tool.Eraser);
+  });
+
+  // 値をペンと消しゴムの間でトグルできる
   it('should be able to toggle the value', () => {
     const toolState = new ToolState();
     toolState.set(Tool.Pen);

@@ -6,23 +6,28 @@ import { TextureLayer } from './texture-layer';
 import { Layer } from './layer';
 import { CommandQueue } from './command-queue';
 import { DrawLine } from './draw-line';
+import { ToolState } from './tool-state';
 
 export class EventRouter {
-  private currentTool: Tool;
   private canvas: HTMLCanvasElement;
   private lastPoint: { x: number; y: number } | null = null;
   private currentLayer: Layer;
   private commandQueue: CommandQueue;
+  private toolState: ToolState;
 
-  constructor(canvas: HTMLCanvasElement, drawLine: DrawLine) {
-    this.currentTool = Tool.Pen;
+  constructor(
+    canvas: HTMLCanvasElement,
+    drawLine: DrawLine,
+    toolState: ToolState,
+  ) {
     this.currentLayer = new TextureLayer('Layer01', drawLine);
     this.canvas = canvas;
     this.commandQueue = new CommandQueue();
+    this.toolState = toolState;
     this.canvas.addEventListener('pointerdown', e => {
-      if (this.currentTool === Tool.Pen) {
+      if (this.toolState.get() === Tool.Pen) {
         this.commandQueue.enqueue(new PenCommand(this.currentLayer));
-      } else if (this.currentTool === Tool.Eraser) {
+      } else if (this.toolState.get() === Tool.Eraser) {
         this.commandQueue.enqueue(new EraserCommand(this.currentLayer));
       }
       this.commandQueue.currentCommand()?.onPointerDown(e);
@@ -43,9 +48,7 @@ export class EventRouter {
         return;
       }
       if (e.key === 'x' || e.key === 'X') {
-        this.currentTool =
-          this.currentTool === Tool.Pen ? Tool.Eraser : Tool.Pen;
-        console.log(`Tool toggled to: ${this.currentTool}`);
+        this.toolState.toggle();
       }
     });
   }
@@ -67,10 +70,6 @@ export class EventRouter {
   }
 
   public getCurrentTool(): Tool {
-    return this.currentTool;
-  }
-
-  public setCurrentTool(tool: Tool): void {
-    this.currentTool = tool;
+    return this.toolState.get();
   }
 }
