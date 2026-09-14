@@ -8,7 +8,7 @@ export class PenCommand implements DrawCommand {
   private readonly points: { x: number; y: number }[] = [];
   private nextSegment: number = 0;
 
-  private size: number = 2;
+  private size: number = 1;
 
   constructor(layer: Layer) {
     this.targetLayer = layer;

@@ -27,11 +27,13 @@ describe('EraserCommand', () => {
     ctx.canvas.height = 20;
 
     const penCommand = new PenCommand(layer);
+    penCommand.setSize(2);
     penCommand.addPoint(0, 0);
     penCommand.addPoint(10, 10);
     penCommand.execute();
 
     const eraserCommand = new EraserCommand(layer);
+    eraserCommand.setSize(10);
     eraserCommand.addPoint(0, 0);
     eraserCommand.addPoint(5, 5);
     eraserCommand.drawNextSegment();

@@ -8,7 +8,7 @@ export class EraserCommand implements DrawCommand {
 
   private readonly points: { x: number; y: number }[] = [];
   private nextSegment: number = 0;
-  private size: number = 10;
+  private size: number = 1;
 
   constructor(layer: Layer) {
     this.targetLayer = layer;
