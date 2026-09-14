@@ -33,4 +33,12 @@ export class SizeSettings extends EventEmitter<{ change: [number] }> {
       this.emit('change', this.value);
     }
   }
+
+  decrease(step: number = 1): void {
+    this.set(this.value - step);
+  }
+
+  increase(step: number = 1): void {
+    this.set(this.value + step);
+  }
 }

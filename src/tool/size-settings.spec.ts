@@ -45,4 +45,18 @@ describe('size-settings', () => {
     sizeSettings.set(20);
     expect(currentValue).toBe(20);
   });
+
+  // 指定値で増加できる
+  it('should be able to increase the value by a specified step', () => {
+    const sizeSettings = new SizeSettings(10, 1, 100);
+    sizeSettings.increase(5);
+    expect(sizeSettings.get()).toBe(15);
+  });
+
+  // 指定値で減少できる
+  it('should be able to decrease the value by a specified step', () => {
+    const sizeSettings = new SizeSettings(10, 1, 100);
+    sizeSettings.decrease(3);
+    expect(sizeSettings.get()).toBe(7);
+  });
 });

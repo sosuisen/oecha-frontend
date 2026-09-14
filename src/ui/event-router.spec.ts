@@ -72,6 +72,61 @@ describe('EventRouter', () => {
     });
   });
 
+  // ツールの設定変更
+  describe('tool settings', () => {
+    // ペンツールでマウスホイールをScrollDownすると、ツールのサイズが増加する
+    it('increases the pen tool size when the mouse wheel is scrolled down', () => {
+      const c = document.createElement('canvas');
+      const toolState = new ToolState();
+      toolState.set(ToolId.Pen);
+      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      const initialSize = toolState.getCurrentTool().sizeSettings.get();
+      const wheelEvent = new WheelEvent('wheel', { deltaY: 100 });
+      c.dispatchEvent(wheelEvent);
+      const newSize = toolState.getCurrentTool().sizeSettings.get();
+      expect(newSize).toBeGreaterThan(initialSize);
+    });
+
+    // ペンツールでマウスホイールをScrollUpすると、ツールのサイズが減少する
+    it('decreases the pen tool size when the mouse wheel is scrolled up', () => {
+      const c = document.createElement('canvas');
+      const toolState = new ToolState();
+      toolState.set(ToolId.Pen);
+      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      const initialSize = toolState.getCurrentTool().sizeSettings.get();
+      const wheelEvent = new WheelEvent('wheel', { deltaY: -100 });
+      c.dispatchEvent(wheelEvent);
+      const newSize = toolState.getCurrentTool().sizeSettings.get();
+      expect(newSize).toBeLessThan(initialSize);
+    });
+
+    // 消しゴムツールでマウスホイールをScrollDownすると、ツールのサイズが増加する
+    it('increases the eraser tool size when the mouse wheel is scrolled down', () => {
+      const c = document.createElement('canvas');
+      const toolState = new ToolState();
+      toolState.set(ToolId.Eraser);
+      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      const initialSize = toolState.getCurrentTool().sizeSettings.get();
+      const wheelEvent = new WheelEvent('wheel', { deltaY: 100 });
+      c.dispatchEvent(wheelEvent);
+      const newSize = toolState.getCurrentTool().sizeSettings.get();
+      expect(newSize).toBeGreaterThan(initialSize);
+    });
+
+    // 消しゴムツールでマウスホイールをScrollUpすると、ツールのサイズが減少する
+    it('decreases the eraser tool size when the mouse wheel is scrolled up', () => {
+      const c = document.createElement('canvas');
+      const toolState = new ToolState();
+      toolState.set(ToolId.Eraser);
+      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      const initialSize = toolState.getCurrentTool().sizeSettings.get();
+      const wheelEvent = new WheelEvent('wheel', { deltaY: -100 });
+      c.dispatchEvent(wheelEvent);
+      const newSize = toolState.getCurrentTool().sizeSettings.get();
+      expect(newSize).toBeLessThan(initialSize);
+    });
+  });
+
   // ペンツールでのストローク
   describe('stroke with the pen tool', () => {
     // ペンツールが選択されていると、pointerdownイベントで PenCommand が作成される

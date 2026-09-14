@@ -8,4 +8,5 @@ export interface Tool {
   readonly label: string;
   readonly sizeSettings: SizeSettings;
   createCommand(layer: Layer): DrawCommand;
+  onWheel?(event: WheelEvent): void;
 }

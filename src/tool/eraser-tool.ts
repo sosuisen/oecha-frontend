@@ -14,4 +14,13 @@ export class EraserTool implements Tool {
     command.setSize(this.sizeSettings.get());
     return command;
   }
+
+  onWheel(event: WheelEvent): void {
+    const delta = Math.sign(event.deltaY);
+    if (delta > 0) {
+      this.sizeSettings.increase();
+    } else if (delta < 0) {
+      this.sizeSettings.decrease();
+    }
+  }
 }

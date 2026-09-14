@@ -39,6 +39,9 @@ export class EventRouter {
         this.commandQueue.advance();
       }
     });
+    this.canvas.addEventListener('wheel', e => {
+      this.toolState.getCurrentTool().onWheel?.(e);
+    });
     window.addEventListener('keydown', e => {
       if (e.repeat) {
         return;
