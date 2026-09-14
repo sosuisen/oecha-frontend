@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { ToolState } from './tool-state';
 import { ToolId } from './tool-id';
+import { PenTool } from './pen-tool';
+import { EraserTool } from './eraser-tool';
 
 describe('ToolState', () => {
   // 初期状態ではペンツールが選択されている
@@ -54,5 +56,14 @@ describe('ToolState', () => {
     toolState.on('change', tool => (currentTool = tool));
     toolState.set(ToolId.Pen);
     expect(currentTool).toBe(null);
+  });
+
+  // getCurrentTool() は現在のツールのインスタンスを返す
+  it('getCurrentTool() returns the instance of the current tool', () => {
+    const toolState = new ToolState();
+    toolState.set(ToolId.Pen);
+    expect(toolState.getCurrentTool()).toBeInstanceOf(PenTool);
+    toolState.set(ToolId.Eraser);
+    expect(toolState.getCurrentTool()).toBeInstanceOf(EraserTool);
   });
 });
