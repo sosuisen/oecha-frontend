@@ -10,6 +10,6 @@ describe('Layer', () => {
       'Layer01',
       new DrawLineOnCanvas(document.createElement('canvas')),
     );
-    expect(layer.getId()).toBe('Layer01');
+    expect(layer.id).toBe('Layer01');
   });
 });

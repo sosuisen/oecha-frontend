@@ -2,6 +2,8 @@
 
 - EventRouter が new Layer('Layer01') を内部で固定生成
 
+- getterをreadonlyに置き換えられるか確認。
+
 ## ツールの変更
 
 - [ ] bでブラシ、eで消しゴムが選択される。

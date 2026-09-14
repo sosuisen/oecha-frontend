@@ -10,14 +10,6 @@ export class PenTool implements Tool {
   readonly sizeSettings: SizeSettings = new SizeSettings(2, 1, 100);
   private color: number = 0xffffff; // デフォルトの色は白
 
-  public getSizeSettings(): SizeSettings {
-    return this.sizeSettings;
-  }
-
-  public getLabel(): string {
-    return this.label;
-  }
-
   public getColor(): number {
     return this.color;
   }

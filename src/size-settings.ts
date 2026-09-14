@@ -2,8 +2,8 @@ import { EventEmitter } from 'pixi.js';
 
 export class SizeSettings extends EventEmitter<{ change: [number] }> {
   private value: number;
-  private min: number;
-  private max: number;
+  readonly min: number;
+  readonly max: number;
 
   constructor(value: number = 1, min: number = 1, max: number = 100) {
     super();
@@ -15,14 +15,6 @@ export class SizeSettings extends EventEmitter<{ change: [number] }> {
         `Initial value ${value} is out of range [${min}, ${max}]`,
       );
     }
-  }
-
-  public getMin(): number {
-    return this.min;
-  }
-
-  public getMax(): number {
-    return this.max;
   }
 
   public get(): number {

@@ -13,8 +13,8 @@ describe('size-settings', () => {
   it('should be able to set initial, minimum, and maximum values', () => {
     const sizeSettings = new SizeSettings(10, 5, 50);
     expect(sizeSettings.get()).toBe(10);
-    expect(sizeSettings.getMin()).toBe(5);
-    expect(sizeSettings.getMax()).toBe(50);
+    expect(sizeSettings.min).toBe(5);
+    expect(sizeSettings.max).toBe(50);
   });
 
   // 最小値と最大値の間に収まらない初期値は、例外を投げる

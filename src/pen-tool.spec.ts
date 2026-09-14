@@ -8,7 +8,7 @@ describe('pen-tool', () => {
   // ペンツールはサイズ設定を持っている
   it('should have size settings', () => {
     const penTool = new PenTool();
-    expect(penTool.getSizeSettings()).toBeInstanceOf(SizeSettings);
+    expect(penTool.sizeSettings).toBeInstanceOf(SizeSettings);
   });
 
   // ペンツールは色を持っている
@@ -20,7 +20,7 @@ describe('pen-tool', () => {
   // ペンツールはラベルを持っている
   it('should have a label', () => {
     const penTool = new PenTool();
-    expect(penTool.getLabel()).toBe('Pen');
+    expect(penTool.label).toBe('Pen');
   });
 
   // ペンツールからペンコマンドを生成することができる
