@@ -2,7 +2,7 @@ import { DrawCommand } from './draw-command';
 import { Layer } from '../layer/layer';
 
 export class PenCommand implements DrawCommand {
-  static readonly DEFAULT_COLOR: number = 0xff00ff;
+  static readonly DEFAULT_COLOR: number = 0xffffff;
   private readonly targetLayer: Layer;
 
   private readonly points: { x: number; y: number }[] = [];
