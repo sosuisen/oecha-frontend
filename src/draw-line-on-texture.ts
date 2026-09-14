@@ -9,12 +9,12 @@ import {
 } from 'pixi.js';
 
 export class DrawLineOnTexture implements DrawLine {
-  private app: Application;
-  private texture: RenderTexture;
+  private readonly app: Application;
+  private readonly texture: RenderTexture;
 
   // renderer.render() ignores the blendMode of the container it receives,
   // so the brush is drawn as a child of this parent.
-  private scene = new Container();
+  private readonly scene = new Container();
 
   constructor(app: Application, texture: RenderTexture) {
     this.app = app;

@@ -4,9 +4,9 @@ import { Layer } from './layer';
 export class EraserCommand implements DrawCommand {
   static readonly DEFAULT_COLOR: number = 0xffffff;
 
-  private targetLayer: Layer;
+  private readonly targetLayer: Layer;
 
-  private points: { x: number; y: number }[] = [];
+  private readonly points: { x: number; y: number }[] = [];
   private nextSegment: number = 0;
   private size: number = 10;
 

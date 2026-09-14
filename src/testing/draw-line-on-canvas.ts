@@ -3,8 +3,8 @@ import { DrawLine, DrawOptions } from '../draw-line';
 import { PointData } from 'pixi.js';
 
 export class DrawLineOnCanvas implements DrawLine {
-  private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D;
+  private readonly canvas: HTMLCanvasElement;
+  private readonly ctx: CanvasRenderingContext2D;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;

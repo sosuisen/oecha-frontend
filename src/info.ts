@@ -3,9 +3,9 @@ import { ToolState } from './tool-state';
 import { ToolId } from './tool-id';
 
 export class Info {
-  private root: Container;
-  private infoText: Text;
-  private toolState: ToolState;
+  private readonly root: Container;
+  private readonly infoText: Text;
+  private readonly toolState: ToolState;
 
   private getToolInfo(): string {
     return this.toolState.get() === ToolId.Pen ? '[Pen]' : '[Eraser]';

@@ -1,7 +1,7 @@
 import { DrawCommand } from './draw-command';
 
 export class CommandQueue {
-  private commands: DrawCommand[] = [];
+  private readonly commands: DrawCommand[] = [];
   private cursor: number = 0;
 
   public length(): number {

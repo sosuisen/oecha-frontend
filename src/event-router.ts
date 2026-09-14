@@ -9,11 +9,11 @@ import { DrawLine } from './draw-line';
 import { ToolState } from './tool-state';
 
 export class EventRouter {
-  private canvas: HTMLCanvasElement;
+  private readonly canvas: HTMLCanvasElement;
   private lastPoint: { x: number; y: number } | null = null;
-  private currentLayer: Layer;
-  private commandQueue: CommandQueue;
-  private toolState: ToolState;
+  private readonly currentLayer: Layer;
+  private readonly commandQueue: CommandQueue;
+  private readonly toolState: ToolState;
 
   constructor(
     canvas: HTMLCanvasElement,
