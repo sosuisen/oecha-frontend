@@ -5,10 +5,7 @@ import { PenTool } from './pen-tool';
 import { EraserTool } from './eraser-tool';
 
 export type ToolStateEvents = {
-  change: {
-    tool: ToolId;
-    size: number;
-  };
+  change: [{ tool: ToolId; size: number }];
 };
 
 export class ToolState extends EventEmitter<ToolStateEvents> {

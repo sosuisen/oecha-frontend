@@ -53,7 +53,7 @@ describe('ToolState', () => {
     toolState.set(ToolId.Pen);
 
     let currentTool: ToolId | null = null;
-    toolState.on('change', tool => (currentTool = tool));
+    toolState.on('change', event => (currentTool = event.tool));
     toolState.set(ToolId.Pen);
     expect(currentTool).toBe(null);
   });
