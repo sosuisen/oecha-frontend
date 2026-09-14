@@ -26,12 +26,13 @@ import { ToolState } from './tool-state';
   const layerSprite = new Sprite(renderTexture);
   app.stage.addChild(layerSprite);
 
+  const toolState = new ToolState();
+
   const infoContainer = new Container();
   app.stage.addChild(infoContainer);
-  const info = new Info(infoContainer);
+  const info = new Info(infoContainer, toolState);
   info.show();
 
-  const toolState = new ToolState();
   new EventRouter(
     app.canvas,
     new DrawLineOnTexture(app, renderTexture),

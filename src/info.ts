@@ -1,13 +1,26 @@
 import { Container, Text } from 'pixi.js';
+import { ToolState } from './tool-state';
+import { Tool } from './tool';
 
 export class Info {
   private root: Container;
   private infoText: Text;
+  private toolState: ToolState;
 
-  constructor(root: Container) {
+  private getToolInfo(): string {
+    return this.toolState.get() === Tool.Pen ? '[Pen]' : '[Eraser]';
+  }
+
+  constructor(root: Container, toolState: ToolState) {
     this.root = root;
+    this.toolState = toolState;
+
+    this.toolState.on('change', () => {
+      this.infoText.text = this.getToolInfo();
+    });
+
     this.infoText = new Text({
-      text: 'Info',
+      text: this.getToolInfo(),
       style: {
         fontSize: 24,
         fill: 0xffffff,
