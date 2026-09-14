@@ -32,10 +32,12 @@ describe('info', () => {
     const info = new Info(root, toolState);
     info.show();
     info.setText('Initial Info');
-    toolState.getCurrentTool().sizeSettings.set(10);
 
-    toolState.set(ToolId.Eraser);
     const text = root.children[0] as Text;
-    expect(text.text).toBe('[Eraser] 10px');
+    toolState.set(ToolId.Eraser);
+    toolState.getCurrentTool().sizeSettings.set(50);
+    expect(text.text).toBe('[Eraser] 50px');
+    toolState.getCurrentTool().sizeSettings.set(100);
+    expect(text.text).toBe('[Eraser] 100px');
   });
 });
