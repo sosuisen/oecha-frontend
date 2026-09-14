@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { EventRouter } from './event-router';
-import { Tool } from './tool';
+import { ToolId } from './tool-id';
 import { PenCommand } from './pen-command';
 import { EraserCommand } from './eraser-command';
 import { DrawLineOnCanvas } from './testing/draw-line-on-canvas';
@@ -51,12 +51,12 @@ describe('EventRouter', () => {
   describe('tool selection', () => {
     // Xキーを押すたびに、ペンツールと消しゴムツールがトグルする。
     it('toggles between the pen and eraser tools when the X key is pressed', () => {
-      expect(eventRouter.getCurrentTool()).toBe(Tool.Pen);
+      expect(eventRouter.getCurrentTool()).toBe(ToolId.Pen);
       const xKeyEvent = new KeyboardEvent('keydown', { key: 'x' });
       window.dispatchEvent(xKeyEvent);
-      expect(eventRouter.getCurrentTool()).toBe(Tool.Eraser);
+      expect(eventRouter.getCurrentTool()).toBe(ToolId.Eraser);
       window.dispatchEvent(xKeyEvent);
-      expect(eventRouter.getCurrentTool()).toBe(Tool.Pen);
+      expect(eventRouter.getCurrentTool()).toBe(ToolId.Pen);
     });
 
     // ツールをトグルすると、ToolStateのchangeイベントが発火する
@@ -78,7 +78,7 @@ describe('EventRouter', () => {
     it('creates a PenCommand for each pointerdown event when the pen tool is selected', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
-      toolState.set(Tool.Pen);
+      toolState.set(ToolId.Pen);
       new EventRouter(c, new DrawLineOnCanvas(c), toolState);
       const router = new EventRouter(c, new DrawLineOnCanvas(c), toolState);
       c.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
@@ -155,7 +155,7 @@ describe('EventRouter', () => {
     it('creates an EraserCommand for each pointerdown event when the eraser tool is selected', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
-      toolState.set(Tool.Eraser);
+      toolState.set(ToolId.Eraser);
       new EventRouter(c, new DrawLineOnCanvas(c), toolState);
       const router = new EventRouter(c, new DrawLineOnCanvas(c), toolState);
       c.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));

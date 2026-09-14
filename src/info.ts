@@ -1,6 +1,6 @@
 import { Container, Text } from 'pixi.js';
 import { ToolState } from './tool-state';
-import { Tool } from './tool';
+import { ToolId } from './tool-id';
 
 export class Info {
   private root: Container;
@@ -8,7 +8,7 @@ export class Info {
   private toolState: ToolState;
 
   private getToolInfo(): string {
-    return this.toolState.get() === Tool.Pen ? '[Pen]' : '[Eraser]';
+    return this.toolState.get() === ToolId.Pen ? '[Pen]' : '[Eraser]';
   }
 
   constructor(root: Container, toolState: ToolState) {

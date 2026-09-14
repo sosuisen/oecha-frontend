@@ -1,14 +1,14 @@
 import { EventEmitter } from 'pixi.js';
-import { Tool } from './tool';
+import { ToolId } from './tool-id';
 
-export class ToolState extends EventEmitter<{ change: [Tool] }> {
-  private currentTool: Tool = Tool.Pen;
+export class ToolState extends EventEmitter<{ change: [ToolId] }> {
+  private currentTool: ToolId = ToolId.Pen;
 
-  public get(): Tool {
+  public get(): ToolId {
     return this.currentTool;
   }
 
-  public set(tool: Tool): void {
+  public set(tool: ToolId): void {
     if (this.currentTool === tool) {
       return;
     }
@@ -17,7 +17,8 @@ export class ToolState extends EventEmitter<{ change: [Tool] }> {
   }
 
   public toggle(): void {
-    const newTool = this.currentTool === Tool.Pen ? Tool.Eraser : Tool.Pen;
+    const newTool =
+      this.currentTool === ToolId.Pen ? ToolId.Eraser : ToolId.Pen;
     this.set(newTool);
   }
 }

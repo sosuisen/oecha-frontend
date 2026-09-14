@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Container, Text } from 'pixi.js';
 import { Info } from './info';
 import { ToolState } from './tool-state';
-import { Tool } from './tool';
+import { ToolId } from './tool-id';
 
 // Test suite for the info module
 describe('info', () => {
@@ -28,12 +28,12 @@ describe('info', () => {
   it('should update the text when the tool state changes', () => {
     const root = new Container();
     const toolState = new ToolState();
-    toolState.set(Tool.Pen);
+    toolState.set(ToolId.Pen);
     const info = new Info(root, toolState);
     info.show();
     info.setText('Initial Info');
 
-    toolState.set(Tool.Eraser);
+    toolState.set(ToolId.Eraser);
     const text = root.children[0] as Text;
     expect(text.text).toBe('[Eraser]');
   });
