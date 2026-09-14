@@ -14,37 +14,37 @@ export class EraserCommand implements DrawCommand {
     this.targetLayer = layer;
   }
 
-  public getPoints(): { x: number; y: number }[] {
+  getPoints(): { x: number; y: number }[] {
     return this.points;
   }
 
-  public setSize(size: number): void {
+  setSize(size: number): void {
     this.size = size;
   }
 
-  public getSize(): number {
+  getSize(): number {
     return this.size;
   }
 
-  public addPoint(x: number, y: number): void {
+  addPoint(x: number, y: number): void {
     this.points.push({ x, y });
   }
 
-  public onPointerDown(event: PointerEvent): void {
+  onPointerDown(event: PointerEvent): void {
     this.points.push({ x: event.clientX, y: event.clientY });
   }
 
-  public onPointerMove(event: PointerEvent): void {
-    this.points.push({ x: event.clientX, y: event.clientY });
-    this.drawNextSegment();
-  }
-
-  public onPointerUp(event: PointerEvent): void {
+  onPointerMove(event: PointerEvent): void {
     this.points.push({ x: event.clientX, y: event.clientY });
     this.drawNextSegment();
   }
 
-  public drawNextSegment(): void {
+  onPointerUp(event: PointerEvent): void {
+    this.points.push({ x: event.clientX, y: event.clientY });
+    this.drawNextSegment();
+  }
+
+  drawNextSegment(): void {
     if (this.points.length < 2 || this.nextSegment >= this.points.length - 1) {
       return;
     }
@@ -64,7 +64,7 @@ export class EraserCommand implements DrawCommand {
    * Draw all segments of the stroke on the target layer.
    * It does not change the current segment index.
    */
-  public execute(): void {
+  execute(): void {
     if (this.points.length === 0) {
       return;
     }

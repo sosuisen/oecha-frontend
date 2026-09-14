@@ -4,15 +4,15 @@ export class CommandQueue {
   private readonly commands: DrawCommand[] = [];
   private cursor: number = 0;
 
-  public length(): number {
+  length(): number {
     return this.commands.length;
   }
 
-  public enqueue(command: DrawCommand): void {
+  enqueue(command: DrawCommand): void {
     this.commands.push(command);
   }
 
-  public currentCommand(): DrawCommand | null {
+  currentCommand(): DrawCommand | null {
     if (this.cursor < this.commands.length) {
       return this.commands[this.cursor];
     }
@@ -24,7 +24,7 @@ export class CommandQueue {
    * and moves the cursor to the next command in the queue.
    * If there are no more commands, it does nothing.
    */
-  public step(): void {
+  step(): void {
     const command = this.currentCommand();
     if (command) {
       command.execute();
@@ -37,7 +37,7 @@ export class CommandQueue {
    * The cursor may advance up to the index just past the last command,
    * but no farther.
    */
-  public advance(): void {
+  advance(): void {
     if (this.cursor < this.commands.length) {
       this.cursor++;
     }

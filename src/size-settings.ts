@@ -17,11 +17,11 @@ export class SizeSettings extends EventEmitter<{ change: [number] }> {
     }
   }
 
-  public get(): number {
+  get(): number {
     return this.value;
   }
 
-  public set(value: number): void {
+  set(value: number): void {
     let newValue = value;
     if (value < this.min) {
       newValue = this.min;

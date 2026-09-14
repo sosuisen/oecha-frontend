@@ -53,23 +53,23 @@ export class EventRouter {
     });
   }
 
-  public onPointerDown(event: PointerEvent): void {
+  onPointerDown(event: PointerEvent): void {
     this.lastPoint = { x: event.clientX, y: event.clientY };
   }
 
-  public getLastPoint(): { x: number; y: number } {
+  getLastPoint(): { x: number; y: number } {
     return this.lastPoint!;
   }
 
-  public getCurrentLayer(): Layer {
+  getCurrentLayer(): Layer {
     return this.currentLayer;
   }
 
-  public getCurrentCommand(): DrawCommand | null {
+  getCurrentCommand(): DrawCommand | null {
     return this.commandQueue.currentCommand();
   }
 
-  public getCurrentTool(): ToolId {
+  getCurrentTool(): ToolId {
     return this.toolState.get();
   }
 }

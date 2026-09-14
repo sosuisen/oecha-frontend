@@ -11,11 +11,7 @@ export class TextureLayer implements Layer {
     this.drawLineDelegate = drawLineDelegate;
   }
 
-  public drawLine(
-    from: PointData,
-    to: PointData,
-    drawOptions: DrawOptions,
-  ): void {
+  drawLine(from: PointData, to: PointData, drawOptions: DrawOptions): void {
     this.drawLineDelegate.draw(from, to, drawOptions);
   }
 }

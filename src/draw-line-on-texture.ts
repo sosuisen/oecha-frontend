@@ -21,7 +21,7 @@ export class DrawLineOnTexture implements DrawLine {
     this.texture = texture;
   }
 
-  public draw(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
+  draw(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
     const lineWidth = drawOptions.size;
 
     let brush: Graphics;

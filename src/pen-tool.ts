@@ -8,9 +8,9 @@ export class PenTool implements Tool {
   readonly id: ToolId = ToolId.Pen;
   readonly label: string = 'Pen';
   readonly sizeSettings: SizeSettings = new SizeSettings(2, 1, 100);
-  private color: number = 0xffffff; // デフォルトの色は白
+  private readonly color: number = 0xffffff; // デフォルトの色は白
 
-  public getColor(): number {
+  getColor(): number {
     return this.color;
   }
 

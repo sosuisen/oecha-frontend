@@ -4,11 +4,11 @@ import { ToolId } from './tool-id';
 export class ToolState extends EventEmitter<{ change: [ToolId] }> {
   private currentTool: ToolId = ToolId.Pen;
 
-  public get(): ToolId {
+  get(): ToolId {
     return this.currentTool;
   }
 
-  public set(tool: ToolId): void {
+  set(tool: ToolId): void {
     if (this.currentTool === tool) {
       return;
     }
@@ -16,7 +16,7 @@ export class ToolState extends EventEmitter<{ change: [ToolId] }> {
     this.emit('change', tool);
   }
 
-  public toggle(): void {
+  toggle(): void {
     const newTool =
       this.currentTool === ToolId.Pen ? ToolId.Eraser : ToolId.Pen;
     this.set(newTool);

@@ -21,7 +21,7 @@ export class DrawLineOnCanvas implements DrawLine {
    * @param p2 - Ending point of the line
    * @param drawOptions - Options for drawing the line
    */
-  public draw(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
+  draw(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
     const lineWidth = drawOptions.size;
     let color = drawOptions.color;
     if (drawOptions.blendMode === 'erase') {
@@ -54,7 +54,7 @@ export class DrawLineOnCanvas implements DrawLine {
    * @param y - The y-coordinate of the pixel
    * @returns The color of the pixel as a 24-bit integer (0x000000 to 0xFFFFFF)
    */
-  public getPixel(x: number, y: number): number {
+  getPixel(x: number, y: number): number {
     const imageData = this.ctx.getImageData(x, y, 1, 1);
     const [r, g, b] = imageData.data;
     return (r << 16) | (g << 8) | b;

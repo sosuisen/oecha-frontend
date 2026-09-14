@@ -14,7 +14,19 @@ export default tseslint.config(
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
+      parserOptions: {
+        projectService: {
+          allowDefaultProject: ['vite.config.ts', 'vitest.config.ts'],
+        },
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
-    rules: {},
+    rules: {
+      '@typescript-eslint/explicit-member-accessibility': [
+        'error',
+        { accessibility: 'no-public' },
+      ],
+      '@typescript-eslint/prefer-readonly': 'error',
+    },
   },
 );
