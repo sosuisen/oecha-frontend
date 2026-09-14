@@ -4,13 +4,29 @@ import { Tool } from './tool';
 import { PenTool } from './pen-tool';
 import { EraserTool } from './eraser-tool';
 
-export class ToolState extends EventEmitter<{ change: [ToolId] }> {
+export type ToolStateEvents = {
+  change: {
+    tool: ToolId;
+    size: number;
+  };
+};
+
+export class ToolState extends EventEmitter<ToolStateEvents> {
   private currentTool: ToolId = ToolId.Pen;
 
   private readonly tools: Record<ToolId, Tool> = {
     [ToolId.Pen]: new PenTool(),
     [ToolId.Eraser]: new EraserTool(),
   };
+
+  constructor() {
+    super();
+    for (const tool of Object.values(this.tools)) {
+      tool.sizeSettings.on('change', size =>
+        this.emit('change', { tool: this.currentTool, size }),
+      );
+    }
+  }
 
   get(): ToolId {
     return this.currentTool;
@@ -21,7 +37,7 @@ export class ToolState extends EventEmitter<{ change: [ToolId] }> {
       return;
     }
     this.currentTool = tool;
-    this.emit('change', tool);
+    this.emit('change', { tool, size: this.tools[tool].sizeSettings.get() });
   }
 
   getCurrentTool(): Tool {

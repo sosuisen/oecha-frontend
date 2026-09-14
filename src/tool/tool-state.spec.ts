@@ -42,7 +42,7 @@ describe('ToolState', () => {
     toolState.set(ToolId.Pen);
 
     let currentTool: ToolId | null = null;
-    toolState.on('change', tool => (currentTool = tool));
+    toolState.on('change', event => (currentTool = event.tool));
     toolState.set(ToolId.Eraser);
     expect(currentTool).toBe(ToolId.Eraser);
   });
@@ -65,5 +65,17 @@ describe('ToolState', () => {
     expect(toolState.getCurrentTool()).toBeInstanceOf(PenTool);
     toolState.set(ToolId.Eraser);
     expect(toolState.getCurrentTool()).toBeInstanceOf(EraserTool);
+  });
+
+  // ツールのサイズが変わったときに、イベントが発火して、サイズを取得できる
+  it('should emit change event when the tool size is changed', () => {
+    const toolState = new ToolState();
+    toolState.set(ToolId.Pen);
+    toolState.getCurrentTool().sizeSettings.set(10);
+
+    let newSize: number | null = null;
+    toolState.on('change', e => (newSize = e.size));
+    toolState.getCurrentTool().sizeSettings.set(15);
+    expect(newSize).toBe(15);
   });
 });

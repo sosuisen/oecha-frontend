@@ -8,7 +8,10 @@ export class Info {
   private readonly toolState: ToolState;
 
   private getToolInfo(): string {
-    return this.toolState.get() === ToolId.Pen ? '[Pen]' : '[Eraser]';
+    const size = this.toolState.getCurrentTool().sizeSettings.get();
+    return this.toolState.get() === ToolId.Pen
+      ? `[Pen] ${size}px`
+      : `[Eraser] ${size}px`;
   }
 
   constructor(root: Container, toolState: ToolState) {
