@@ -4,13 +4,18 @@ import { DrawLineOnTexture } from './layer/draw-line-on-texture';
 import { DEFAULT_BACKGROUND_COLOR } from './ui/background';
 import { Info } from './ui/info';
 import { ToolState } from './tool/tool-state';
+import { BrushCursor } from './ui/brush-cursor';
 
 (async () => {
   const app = new Application();
   await app.init({
     background: DEFAULT_BACKGROUND_COLOR,
     resizeTo: window,
+    antialias: true,
   });
+  app.stage.eventMode = 'static';
+  app.stage.hitArea = app.screen;
+  app.stage.cursor = 'none';
 
   console.log(app.renderer.name); // 'webgl' or 'webgpu'
 
@@ -33,9 +38,15 @@ import { ToolState } from './tool/tool-state';
   const info = new Info(infoContainer, toolState);
   info.show();
 
+  const brushCursorContainer = new Container();
+  app.stage.addChild(brushCursorContainer);
+  const brushCursor = new BrushCursor(brushCursorContainer, toolState);
+  brushCursor.show();
+
   new EventRouter(
     app.canvas,
     new DrawLineOnTexture(app, renderTexture),
     toolState,
+    brushCursor,
   );
 })();

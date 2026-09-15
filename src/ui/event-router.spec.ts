@@ -5,10 +5,17 @@ import { PenCommand } from '../command/pen-command';
 import { EraserCommand } from '../command/eraser-command';
 import { DrawLineOnCanvas } from '../testing/draw-line-on-canvas';
 import { ToolState } from '../tool/tool-state';
+import { BrushCursor } from './brush-cursor';
+import { Container } from 'pixi.js';
 
 interface Point {
   x: number;
   y: number;
+}
+
+function createBrushCursor(): BrushCursor {
+  const container = new Container();
+  return new BrushCursor(container, new ToolState());
 }
 
 function createPointerEvent(type: string, point: Point): Event {
@@ -44,6 +51,7 @@ describe('EventRouter', () => {
       canvas,
       new DrawLineOnCanvas(canvas),
       new ToolState(),
+      createBrushCursor(),
     );
   });
 
@@ -63,7 +71,12 @@ describe('EventRouter', () => {
     it('emits a change event when the tool is switched', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
-      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      new EventRouter(
+        c,
+        new DrawLineOnCanvas(c),
+        toolState,
+        createBrushCursor(),
+      );
       let invoked = false;
       toolState.on('change', () => (invoked = true));
       const xKeyEvent = new KeyboardEvent('keydown', { key: 'x' });
@@ -79,7 +92,12 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Pen);
-      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      new EventRouter(
+        c,
+        new DrawLineOnCanvas(c),
+        toolState,
+        createBrushCursor(),
+      );
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
       const wheelEvent = new WheelEvent('wheel', { deltaY: 100 });
       c.dispatchEvent(wheelEvent);
@@ -92,7 +110,12 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Pen);
-      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      new EventRouter(
+        c,
+        new DrawLineOnCanvas(c),
+        toolState,
+        createBrushCursor(),
+      );
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
       const wheelEvent = new WheelEvent('wheel', { deltaY: -100 });
       c.dispatchEvent(wheelEvent);
@@ -105,7 +128,12 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Eraser);
-      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      new EventRouter(
+        c,
+        new DrawLineOnCanvas(c),
+        toolState,
+        createBrushCursor(),
+      );
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
       const wheelEvent = new WheelEvent('wheel', { deltaY: 100 });
       c.dispatchEvent(wheelEvent);
@@ -118,7 +146,12 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Eraser);
-      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      new EventRouter(
+        c,
+        new DrawLineOnCanvas(c),
+        toolState,
+        createBrushCursor(),
+      );
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
       const wheelEvent = new WheelEvent('wheel', { deltaY: -100 });
       c.dispatchEvent(wheelEvent);
@@ -134,8 +167,12 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Pen);
-      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
-      const router = new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      const router = new EventRouter(
+        c,
+        new DrawLineOnCanvas(c),
+        toolState,
+        createBrushCursor(),
+      );
       c.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
       expect(router.getCurrentCommand()).toBeInstanceOf(PenCommand);
     });
@@ -211,10 +248,59 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Eraser);
-      new EventRouter(c, new DrawLineOnCanvas(c), toolState);
-      const router = new EventRouter(c, new DrawLineOnCanvas(c), toolState);
+      const router = new EventRouter(
+        c,
+        new DrawLineOnCanvas(c),
+        toolState,
+        createBrushCursor(),
+      );
       c.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
       expect(router.getCurrentCommand()).toBeInstanceOf(EraserCommand);
+    });
+  });
+
+  // カーソル
+  describe('cursor', () => {
+    // 描画ツールのときにマウスカーソルを動かすと、ブラシカーソルが追従する
+    it('updates the brush cursor position when the mouse is moved with the pen tool selected', () => {
+      const c = document.createElement('canvas');
+      const toolState = new ToolState();
+      toolState.set(ToolId.Pen);
+
+      const brushCursor = new BrushCursor(new Container(), toolState);
+
+      const router = new EventRouter(
+        c,
+        new DrawLineOnCanvas(c),
+        toolState,
+        brushCursor,
+      );
+      c.dispatchEvent(createPointerEvent('pointermove', { x: 100, y: 200 }));
+      const lastPoint = router.getLastPoint();
+
+      expect(lastPoint).toEqual({
+        x: brushCursor.getX(),
+        y: brushCursor.getY(),
+      });
+    });
+
+    // ツールのサイズを変更すると、ブラシカーソルのサイズも変化する
+    it('updates the brush cursor size when the tool size is changed', () => {
+      const toolState = new ToolState();
+      toolState.set(ToolId.Pen);
+      const brushCursor = new BrushCursor(new Container(), toolState);
+
+      toolState.getCurrentTool().sizeSettings.set(10);
+      expect(brushCursor.getSize()).toEqual({
+        width: 10 + BrushCursor.LINE_WIDTH,
+        height: 10 + BrushCursor.LINE_WIDTH,
+      });
+
+      toolState.getCurrentTool().sizeSettings.set(20);
+      expect(brushCursor.getSize()).toEqual({
+        width: 20 + BrushCursor.LINE_WIDTH,
+        height: 20 + BrushCursor.LINE_WIDTH,
+      });
     });
   });
 });
