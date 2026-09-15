@@ -1,18 +1,18 @@
-import { DrawCommand } from './draw-command';
+import { Command } from './command';
 
 export class CommandQueue {
-  private readonly commands: DrawCommand[] = [];
+  private readonly commands: Command[] = [];
   private cursor: number = 0;
 
   length(): number {
     return this.commands.length;
   }
 
-  enqueue(command: DrawCommand): void {
+  enqueue(command: Command): void {
     this.commands.push(command);
   }
 
-  currentCommand(): DrawCommand | null {
+  currentCommand(): Command | null {
     if (this.cursor < this.commands.length) {
       return this.commands[this.cursor];
     }

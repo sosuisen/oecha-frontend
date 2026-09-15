@@ -1,6 +1,7 @@
 import { getCssRgb } from '../util/color-utils';
 import { DrawLine, DrawOptions } from '../layer/draw-line';
 import { PointData } from 'pixi.js';
+import { Rect } from '../layer/rect';
 
 export class DrawLineOnCanvas implements DrawLine {
   private readonly canvas: HTMLCanvasElement;
@@ -58,5 +59,9 @@ export class DrawLineOnCanvas implements DrawLine {
     const imageData = this.ctx.getImageData(x, y, 1, 1);
     const [r, g, b] = imageData.data;
     return (r << 16) | (g << 8) | b;
+  }
+
+  clearRect(rect: Rect): void {
+    this.ctx.clearRect(rect.x, rect.y, rect.width, rect.height);
   }
 }

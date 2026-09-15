@@ -7,6 +7,7 @@ import {
   BLEND_MODES,
   PointData,
 } from 'pixi.js';
+import { Rect } from './rect';
 
 export class DrawLineOnTexture implements DrawLine {
   private readonly app: Application;
@@ -56,5 +57,23 @@ export class DrawLineOnTexture implements DrawLine {
 
     this.scene.removeChild(brush);
     brush.destroy();
+  }
+
+  clearRect(rect: Rect): void {
+    const clearGraphics = new Graphics()
+      .rect(rect.x, rect.y, rect.width, rect.height)
+      .fill(0xffffff);
+
+    this.scene.addChild(clearGraphics);
+    clearGraphics.blendMode = 'erase';
+
+    this.app.renderer.render({
+      container: this.scene,
+      target: this.texture,
+      clear: false,
+    });
+
+    this.scene.removeChild(clearGraphics);
+    clearGraphics.destroy();
   }
 }

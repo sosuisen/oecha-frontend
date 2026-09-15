@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { EventRouter } from './event-router';
 import { ToolId } from '../tool/tool-id';
 import { PenCommand } from '../command/pen-command';
@@ -38,6 +38,23 @@ function createPointerEvent(type: string, point: Point): Event {
   return mouseEvent;
 }
 
+const routers: EventRouter[] = [];
+
+function createEventRouter(
+  canvas: HTMLCanvasElement,
+  toolState: ToolState = new ToolState(),
+  brushCursor: BrushCursor = createBrushCursor(),
+): EventRouter {
+  const router = new EventRouter(
+    canvas,
+    new DrawLineOnCanvas(canvas),
+    toolState,
+    brushCursor,
+  );
+  routers.push(router);
+  return router;
+}
+
 // EventRouter はツールの選択状態を持ち、ポインターイベントをコマンドへ振り分ける
 describe('EventRouter', () => {
   let canvas: HTMLCanvasElement;
@@ -47,12 +64,12 @@ describe('EventRouter', () => {
     canvas = document.createElement('canvas');
     canvas.width = 800;
     canvas.height = 600;
-    eventRouter = new EventRouter(
-      canvas,
-      new DrawLineOnCanvas(canvas),
-      new ToolState(),
-      createBrushCursor(),
-    );
+    eventRouter = createEventRouter(canvas);
+  });
+
+  afterEach(() => {
+    routers.forEach(router => router.destroy());
+    routers.length = 0;
   });
 
   // ツールの選択
@@ -71,12 +88,7 @@ describe('EventRouter', () => {
     it('emits a change event when the tool is switched', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
-      new EventRouter(
-        c,
-        new DrawLineOnCanvas(c),
-        toolState,
-        createBrushCursor(),
-      );
+      createEventRouter(c, toolState);
       let invoked = false;
       toolState.on('change', () => (invoked = true));
       const xKeyEvent = new KeyboardEvent('keydown', { key: 'x' });
@@ -92,12 +104,7 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Pen);
-      new EventRouter(
-        c,
-        new DrawLineOnCanvas(c),
-        toolState,
-        createBrushCursor(),
-      );
+      createEventRouter(c, toolState);
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
       const wheelEvent = new WheelEvent('wheel', { deltaY: 100 });
       c.dispatchEvent(wheelEvent);
@@ -110,12 +117,7 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Pen);
-      new EventRouter(
-        c,
-        new DrawLineOnCanvas(c),
-        toolState,
-        createBrushCursor(),
-      );
+      createEventRouter(c, toolState);
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
       const wheelEvent = new WheelEvent('wheel', { deltaY: -100 });
       c.dispatchEvent(wheelEvent);
@@ -128,12 +130,7 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Eraser);
-      new EventRouter(
-        c,
-        new DrawLineOnCanvas(c),
-        toolState,
-        createBrushCursor(),
-      );
+      createEventRouter(c, toolState);
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
       const wheelEvent = new WheelEvent('wheel', { deltaY: 100 });
       c.dispatchEvent(wheelEvent);
@@ -146,12 +143,7 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Eraser);
-      new EventRouter(
-        c,
-        new DrawLineOnCanvas(c),
-        toolState,
-        createBrushCursor(),
-      );
+      createEventRouter(c, toolState);
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
       const wheelEvent = new WheelEvent('wheel', { deltaY: -100 });
       c.dispatchEvent(wheelEvent);
@@ -167,12 +159,7 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Pen);
-      const router = new EventRouter(
-        c,
-        new DrawLineOnCanvas(c),
-        toolState,
-        createBrushCursor(),
-      );
+      const router = createEventRouter(c, toolState);
       c.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
       expect(router.getCurrentCommand()).toBeInstanceOf(PenCommand);
     });
@@ -248,14 +235,40 @@ describe('EventRouter', () => {
       const c = document.createElement('canvas');
       const toolState = new ToolState();
       toolState.set(ToolId.Eraser);
-      const router = new EventRouter(
-        c,
-        new DrawLineOnCanvas(c),
-        toolState,
-        createBrushCursor(),
-      );
+      const router = createEventRouter(c, toolState);
       c.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
       expect(router.getCurrentCommand()).toBeInstanceOf(EraserCommand);
+    });
+  });
+
+  // 全画面消去
+  describe('clear screen', () => {
+    // Deleteキーを押すと、レイヤーの全画面が消去される
+    it('clears the entire layer when the Delete key is pressed', () => {
+      const c = document.createElement('canvas');
+      const ctx = c.getContext('2d')!;
+      ctx.canvas.width = 100;
+      ctx.canvas.height = 100;
+      ctx.fillStyle = 'red';
+      ctx.fillRect(0, 0, 100, 100);
+
+      const toolState = new ToolState();
+
+      createEventRouter(c, toolState);
+
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete' }));
+
+      const imageData = ctx.getImageData(0, 0, 1, 1);
+      const [, , , a1] = imageData.data;
+      expect(a1).toBe(0);
+
+      const imageData2 = ctx.getImageData(50, 50, 1, 1);
+      const [, , , a2] = imageData2.data;
+      expect(a2).toBe(0);
+
+      const imageData3 = ctx.getImageData(99, 99, 1, 1);
+      const [, , , a3] = imageData3.data;
+      expect(a3).toBe(0);
     });
   });
 
@@ -269,12 +282,7 @@ describe('EventRouter', () => {
 
       const brushCursor = new BrushCursor(new Container(), toolState);
 
-      const router = new EventRouter(
-        c,
-        new DrawLineOnCanvas(c),
-        toolState,
-        brushCursor,
-      );
+      const router = createEventRouter(c, toolState, brushCursor);
       c.dispatchEvent(createPointerEvent('pointermove', { x: 100, y: 200 }));
       const lastPoint = router.getLastPoint();
 

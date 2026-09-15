@@ -6,6 +6,8 @@ import { CommandQueue } from '../command/command-queue';
 import { DrawLine } from '../layer/draw-line';
 import { ToolState } from '../tool/tool-state';
 import { BrushCursor } from './brush-cursor';
+import { ClearCommand } from '../command/clear-command';
+import { Command } from '../command/command';
 
 export class EventRouter {
   private readonly canvas: HTMLCanvasElement;
@@ -14,6 +16,27 @@ export class EventRouter {
   private readonly commandQueue: CommandQueue;
   private readonly toolState: ToolState;
   private readonly brushCursor: BrushCursor;
+
+  private activeStroke: DrawCommand | null = null;
+
+  private readonly onKeyDown = (e: KeyboardEvent) => {
+    if (e.repeat) {
+      return;
+    }
+    if (e.key === 'x' || e.key === 'X') {
+      this.toolState.toggle();
+    }
+    if (e.key === 'Delete') {
+      const clearCommand = new ClearCommand(this.currentLayer, {
+        x: 0,
+        y: 0,
+        width: this.canvas.width,
+        height: this.canvas.height,
+      });
+      this.commandQueue.enqueue(clearCommand);
+      this.commandQueue.step();
+    }
+  };
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -31,32 +54,29 @@ export class EventRouter {
       const currentTool = this.toolState.getCurrentTool();
       const command = currentTool.createCommand(this.currentLayer);
       this.commandQueue.enqueue(command);
+      this.activeStroke = command;
       command.onPointerDown(e);
     });
     this.canvas.addEventListener('pointermove', e => {
       this.onPointerMove(e);
-      if (this.commandQueue.currentCommand()) {
-        this.commandQueue.currentCommand()?.onPointerMove(e);
-      }
+      this.activeStroke?.onPointerMove(e);
     });
     this.canvas.addEventListener('pointerup', e => {
       this.onPointerUp(e);
-      if (this.commandQueue.currentCommand()) {
-        this.commandQueue.currentCommand()?.onPointerUp(e);
+      if (this.activeStroke) {
+        this.activeStroke.onPointerUp(e);
         this.commandQueue.advance();
+        this.activeStroke = null;
       }
     });
     this.canvas.addEventListener('wheel', e => {
       this.toolState.getCurrentTool().onWheel?.(e);
     });
-    window.addEventListener('keydown', e => {
-      if (e.repeat) {
-        return;
-      }
-      if (e.key === 'x' || e.key === 'X') {
-        this.toolState.toggle();
-      }
-    });
+    window.addEventListener('keydown', this.onKeyDown);
+  }
+
+  destroy() {
+    window.removeEventListener('keydown', this.onKeyDown);
   }
 
   onPointerDown(event: PointerEvent): void {
@@ -85,7 +105,7 @@ export class EventRouter {
     return this.currentLayer;
   }
 
-  getCurrentCommand(): DrawCommand | null {
+  getCurrentCommand(): Command | null {
     return this.commandQueue.currentCommand();
   }
 

@@ -1,6 +1,7 @@
 import { PointData } from 'pixi.js';
 import { Layer } from './layer';
 import { DrawLine, DrawOptions } from './draw-line';
+import { Rect } from './rect';
 
 export class TextureLayer implements Layer {
   readonly id: string;
@@ -13,5 +14,9 @@ export class TextureLayer implements Layer {
 
   drawLine(from: PointData, to: PointData, drawOptions: DrawOptions): void {
     this.drawLineDelegate.draw(from, to, drawOptions);
+  }
+
+  clearRect(rect: Rect): void {
+    this.drawLineDelegate.clearRect(rect);
   }
 }

@@ -1,6 +1,7 @@
-export interface DrawCommand {
+import { Command } from './command';
+
+export interface DrawCommand extends Command {
   drawNextSegment(): void;
-  execute(): void;
   addPoint(x: number, y: number): void;
   setSize(size: number): void;
   getSize(): number;
