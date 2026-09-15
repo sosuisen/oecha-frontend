@@ -6,11 +6,9 @@ export class BrushCursor {
   static readonly COLOR = 0x606060;
   graphics: Graphics;
   private readonly container: Container;
-  private readonly toolState: ToolState;
 
   constructor(container: Container, toolState: ToolState) {
     this.container = container;
-    this.toolState = toolState;
     this.graphics = new Graphics();
     this.graphics.x = 0;
     this.graphics.y = 0;
