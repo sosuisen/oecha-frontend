@@ -18,9 +18,9 @@ export class EraserTool implements Tool {
   onWheel(event: WheelEvent): void {
     const delta = Math.sign(event.deltaY);
     if (delta > 0) {
-      this.sizeSettings.increase();
-    } else if (delta < 0) {
       this.sizeSettings.decrease();
+    } else if (delta < 0) {
+      this.sizeSettings.increase();
     }
   }
 }
