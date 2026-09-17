@@ -360,4 +360,18 @@ describe('EventRouter', () => {
       });
     });
   });
+
+  // レイヤーの選択
+  describe('layer selection', () => {
+    // 2キーを押すと2枚目のレイヤーが、1キーを押すと1枚目のレイヤーが現在のレイヤーになる
+    it('selects the second layer with the 2 key and the first layer with the 1 key', () => {
+      expect(eventRouter.getCurrentLayer().id).toBe('Layer01');
+
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: '2' }));
+      expect(eventRouter.getCurrentLayer().id).toBe('Layer02');
+
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: '1' }));
+      expect(eventRouter.getCurrentLayer().id).toBe('Layer01');
+    });
+  });
 });
