@@ -3,7 +3,7 @@ import { EventRouter } from './event-router';
 import { ToolId } from '../tool/tool-id';
 import { PenCommand } from '../command/pen-command';
 import { EraserCommand } from '../command/eraser-command';
-import { DrawLineOnCanvas } from '../testing/draw-line-on-canvas';
+import { CanvasSurface } from '../testing/canvas-surface';
 import { ToolState } from '../tool/tool-state';
 import { BrushCursor } from './brush-cursor';
 import { Container } from 'pixi.js';
@@ -47,7 +47,7 @@ function createEventRouter(
 ): EventRouter {
   const router = new EventRouter(
     canvas,
-    new DrawLineOnCanvas(canvas),
+    new CanvasSurface(canvas),
     toolState,
     brushCursor,
   );

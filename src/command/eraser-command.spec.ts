@@ -3,7 +3,7 @@ import { EraserCommand } from './eraser-command';
 import { DrawCommand } from './draw-command';
 import { PenCommand } from './pen-command';
 import { CanvasLayer } from '../testing/canvas-layer';
-import { DrawLineOnCanvas } from '../testing/draw-line-on-canvas';
+import { CanvasSurface } from '../testing/canvas-surface';
 
 // EraserCommand のテスト
 describe('EraserCommand', () => {
@@ -12,7 +12,7 @@ describe('EraserCommand', () => {
     const eraserCommand = new EraserCommand(
       new CanvasLayer(
         'Layer01',
-        new DrawLineOnCanvas(document.createElement('canvas')),
+        new CanvasSurface(document.createElement('canvas')),
       ),
     );
     expectTypeOf(eraserCommand).toExtend<DrawCommand>();
@@ -21,7 +21,7 @@ describe('EraserCommand', () => {
   // drawNextSegment() は、2点間の線分で消去する
   it('draws a line segment between the last two points when drawNextSegment is called', () => {
     const canvas = document.createElement('canvas');
-    const layer = new CanvasLayer('Layer01', new DrawLineOnCanvas(canvas));
+    const layer = new CanvasLayer('Layer01', new CanvasSurface(canvas));
     const ctx = canvas.getContext('2d')!;
     ctx.canvas.width = 20;
     ctx.canvas.height = 20;
@@ -51,7 +51,7 @@ describe('EraserCommand', () => {
     const eraserCommand = new EraserCommand(
       new CanvasLayer(
         'Layer01',
-        new DrawLineOnCanvas(document.createElement('canvas')),
+        new CanvasSurface(document.createElement('canvas')),
       ),
     );
     eraserCommand.setSize(10);

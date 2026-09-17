@@ -1,22 +1,22 @@
 import { Layer } from '../layer/layer';
-import { DrawLine, DrawOptions } from '../layer/draw-line';
+import { DrawingSurface, DrawOptions } from '../layer/drawing-surface';
 import { PointData } from 'pixi.js';
 import { Rect } from '../layer/rect';
 
 export class CanvasLayer implements Layer {
   readonly id: string;
-  private readonly drawLineDelegate: DrawLine;
+  private readonly surface: DrawingSurface;
 
-  constructor(id: string, drawLineDelegate: DrawLine) {
+  constructor(id: string, surface: DrawingSurface) {
     this.id = id;
-    this.drawLineDelegate = drawLineDelegate;
+    this.surface = surface;
   }
 
   drawLine(from: PointData, to: PointData, drawOptions: DrawOptions): void {
-    this.drawLineDelegate.draw(from, to, drawOptions);
+    this.surface.drawLine(from, to, drawOptions);
   }
 
   clearRect(rect: Rect): void {
-    this.drawLineDelegate.clearRect(rect);
+    this.surface.clearRect(rect);
   }
 }

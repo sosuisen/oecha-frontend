@@ -3,7 +3,7 @@ import { DrawCommand } from '../command/draw-command';
 import { TextureLayer } from '../layer/texture-layer';
 import { Layer } from '../layer/layer';
 import { CommandQueue } from '../command/command-queue';
-import { DrawLine } from '../layer/draw-line';
+import { DrawingSurface } from '../layer/drawing-surface';
 import { ToolState } from '../tool/tool-state';
 import { BrushCursor } from './brush-cursor';
 import { ClearCommand } from '../command/clear-command';
@@ -50,11 +50,11 @@ export class EventRouter {
 
   constructor(
     canvas: HTMLCanvasElement,
-    drawLine: DrawLine,
+    surface: DrawingSurface,
     toolState: ToolState,
     brushCursor: BrushCursor,
   ) {
-    this.currentLayer = new TextureLayer('Layer01', drawLine);
+    this.currentLayer = new TextureLayer('Layer01', surface);
     this.canvas = canvas;
     this.commandQueue = new CommandQueue();
     this.toolState = toolState;

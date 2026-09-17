@@ -8,7 +8,7 @@ import { Rect } from './rect';
  */
 export type DrawOptions = { blendMode: string; color: number; size: number };
 
-export interface DrawLine {
-  draw(p1: PointData, p2: PointData, drawOptions: DrawOptions): void;
+export interface DrawingSurface {
+  drawLine(p1: PointData, p2: PointData, drawOptions: DrawOptions): void;
   clearRect(rect: Rect): void;
 }

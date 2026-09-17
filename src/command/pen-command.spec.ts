@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { PenCommand } from './pen-command';
 import { CanvasLayer } from '../testing/canvas-layer';
-import { DrawLineOnCanvas } from '../testing/draw-line-on-canvas';
+import { CanvasSurface } from '../testing/canvas-surface';
 
 // マウスドラッグで線を描く
 describe('PenCommand', () => {
@@ -10,7 +10,7 @@ describe('PenCommand', () => {
     const penCommand = new PenCommand(
       new CanvasLayer(
         'Layer01',
-        new DrawLineOnCanvas(document.createElement('canvas')),
+        new CanvasSurface(document.createElement('canvas')),
       ),
     );
     expect(penCommand.getPoints()).toEqual([]);
@@ -28,7 +28,7 @@ describe('PenCommand', () => {
       { x: 1, y: 1 },
       { x: 2, y: 2 },
     ];
-    const layer = new CanvasLayer('Layer01', new DrawLineOnCanvas(canvas));
+    const layer = new CanvasLayer('Layer01', new CanvasSurface(canvas));
     const penCommand = new PenCommand(layer);
     stroke.forEach(point => {
       penCommand.addPoint(point.x, point.y);
@@ -55,7 +55,7 @@ describe('PenCommand', () => {
   // drawNextSegment() は、2点間の線分を描画する
   it('draws a line segment between the last two points when drawNextSegment is called', () => {
     const canvas = document.createElement('canvas');
-    const layer = new CanvasLayer('Layer01', new DrawLineOnCanvas(canvas));
+    const layer = new CanvasLayer('Layer01', new CanvasSurface(canvas));
     const ctx = canvas.getContext('2d')!;
     ctx.canvas.width = 20;
     ctx.canvas.height = 20;
@@ -83,7 +83,7 @@ describe('PenCommand', () => {
   // 始点と終点が同じ場合は点が描画される
   it('draws a point when the start and end points are the same', () => {
     const canvas = document.createElement('canvas');
-    const layer = new CanvasLayer('Layer01', new DrawLineOnCanvas(canvas));
+    const layer = new CanvasLayer('Layer01', new CanvasSurface(canvas));
     const ctx = canvas.getContext('2d')!;
     ctx.canvas.width = 20;
     ctx.canvas.height = 20;
@@ -104,7 +104,7 @@ describe('PenCommand', () => {
     const penCommand = new PenCommand(
       new CanvasLayer(
         'Layer01',
-        new DrawLineOnCanvas(document.createElement('canvas')),
+        new CanvasSurface(document.createElement('canvas')),
       ),
     );
     penCommand.setSize(10);

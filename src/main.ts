@@ -1,6 +1,6 @@
 import { Application, Container, RenderTexture, Sprite } from 'pixi.js';
 import { EventRouter } from './ui/event-router';
-import { DrawLineOnTexture } from './layer/draw-line-on-texture';
+import { TextureSurface } from './layer/texture-surface';
 import { DEFAULT_BACKGROUND_COLOR } from './ui/background';
 import { Info } from './ui/info';
 import { ToolState } from './tool/tool-state';
@@ -45,7 +45,7 @@ import { BrushCursor } from './ui/brush-cursor';
 
   new EventRouter(
     app.canvas,
-    new DrawLineOnTexture(app, renderTexture),
+    new TextureSurface(app, renderTexture),
     toolState,
     brushCursor,
   );

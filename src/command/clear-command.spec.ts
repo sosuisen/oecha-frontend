@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { ClearCommand } from './clear-command';
 import { CanvasLayer } from '../testing/canvas-layer';
-import { DrawLineOnCanvas } from '../testing/draw-line-on-canvas';
+import { CanvasSurface } from '../testing/canvas-surface';
 
 // 矩形を消去するコマンドのテスト
 describe('ClearCommand', () => {
@@ -14,7 +14,7 @@ describe('ClearCommand', () => {
     ctx.fillStyle = 'red';
     ctx.fillRect(0, 0, 100, 100);
 
-    const layer = new CanvasLayer('Layer01', new DrawLineOnCanvas(canvas));
+    const layer = new CanvasLayer('Layer01', new CanvasSurface(canvas));
     const clearCommand = new ClearCommand(layer, {
       x: 10,
       y: 10,

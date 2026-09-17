@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { TextureLayer } from './texture-layer';
-import { DrawLineOnCanvas } from '../testing/draw-line-on-canvas';
+import { CanvasSurface } from '../testing/canvas-surface';
 
 // レイヤーのテスト
 describe('Layer', () => {
@@ -8,7 +8,7 @@ describe('Layer', () => {
   it('returns the ID given to the constructor', () => {
     const layer = new TextureLayer(
       'Layer01',
-      new DrawLineOnCanvas(document.createElement('canvas')),
+      new CanvasSurface(document.createElement('canvas')),
     );
     expect(layer.id).toBe('Layer01');
   });

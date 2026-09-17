@@ -1,9 +1,9 @@
 import { getCssRgb } from '../util/color-utils';
-import { DrawLine, DrawOptions } from '../layer/draw-line';
+import { DrawingSurface, DrawOptions } from '../layer/drawing-surface';
 import { PointData } from 'pixi.js';
 import { Rect } from '../layer/rect';
 
-export class DrawLineOnCanvas implements DrawLine {
+export class CanvasSurface implements DrawingSurface {
   private readonly canvas: HTMLCanvasElement;
   private readonly ctx: CanvasRenderingContext2D;
 
@@ -22,7 +22,7 @@ export class DrawLineOnCanvas implements DrawLine {
    * @param p2 - Ending point of the line
    * @param drawOptions - Options for drawing the line
    */
-  draw(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
+  drawLine(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
     const lineWidth = drawOptions.size;
     let color = drawOptions.color;
     if (drawOptions.blendMode === 'erase') {

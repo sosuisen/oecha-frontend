@@ -1,5 +1,5 @@
 import { PointData } from 'pixi.js';
-import { DrawOptions } from './draw-line';
+import { DrawOptions } from './drawing-surface';
 import { Rect } from './rect';
 
 export interface Layer {

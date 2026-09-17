@@ -1,4 +1,4 @@
-import { DrawLine, DrawOptions } from './draw-line';
+import { DrawingSurface, DrawOptions } from './drawing-surface';
 import {
   Application,
   Container,
@@ -9,7 +9,7 @@ import {
 } from 'pixi.js';
 import { Rect } from './rect';
 
-export class DrawLineOnTexture implements DrawLine {
+export class TextureSurface implements DrawingSurface {
   private readonly app: Application;
   private readonly texture: RenderTexture;
 
@@ -22,7 +22,7 @@ export class DrawLineOnTexture implements DrawLine {
     this.texture = texture;
   }
 
-  draw(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
+  drawLine(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
     const lineWidth = drawOptions.size;
 
     let brush: Graphics;
