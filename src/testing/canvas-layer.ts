@@ -1,17 +1,15 @@
 import { Layer } from '../layer/layer';
 import { DrawingSurface, DrawOptions } from '../layer/drawing-surface';
-import { PointData, Sprite } from 'pixi.js';
+import { PointData } from 'pixi.js';
 import { Rect } from '../layer/rect';
 
 export class CanvasLayer implements Layer {
   readonly id: string;
-  readonly layerSprite: Sprite;
   private readonly surface: DrawingSurface;
 
   constructor(id: string, surface: DrawingSurface) {
     this.id = id;
     this.surface = surface;
-    this.layerSprite = new Sprite();
   }
 
   getSurface(): DrawingSurface {
