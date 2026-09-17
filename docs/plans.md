@@ -5,3 +5,8 @@
   - [x] 現在のレイヤーが Infoのツールの手前に表示される。
   - [x] LayerStack で select すると change イベントが発火する
   - [x] LayerStack で同じ index を select しても change イベントは発火しない
+
+## 色
+- [x] レイヤーごとに色を変える
+  - [x] ToolStateで色を管理
+  - [x] レイヤー1は水色、レイヤー2は黒色
