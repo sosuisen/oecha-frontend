@@ -5,6 +5,8 @@ import { DEFAULT_BACKGROUND_COLOR } from './ui/background';
 import { Info } from './ui/info';
 import { ToolState } from './tool/tool-state';
 import { BrushCursor } from './ui/brush-cursor';
+import { TextureLayerStack } from './layer/texture-layer-stack';
+import { TextureLayer } from './layer/texture-layer';
 
 (async () => {
   const app = new Application();
@@ -21,14 +23,18 @@ import { BrushCursor } from './ui/brush-cursor';
 
   document.getElementById('pixi-container')!.appendChild(app.canvas);
 
-  const textureSurface = new TextureSurface(app);
+  const layerStack = new TextureLayerStack(id => {
+    const surface = new TextureSurface(app);
+    return new TextureLayer(id, surface, new Sprite(surface.getTexture()));
+  });
+  layerStack.getLayers().forEach(layer => {
+    app.stage.addChild(layer.layerSprite);
+  });
+
   const toolState = new ToolState();
   const brushCursorContainer = new Container();
   const brushCursor = new BrushCursor(brushCursorContainer, toolState);
-  new EventRouter(app.canvas, textureSurface, toolState, brushCursor);
-
-  const layerSprite = new Sprite(textureSurface.getTexture());
-  app.stage.addChild(layerSprite);
+  new EventRouter(app.canvas, layerStack, toolState, brushCursor);
 
   const infoContainer = new Container();
   app.stage.addChild(infoContainer);

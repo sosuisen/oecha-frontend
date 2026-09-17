@@ -1,18 +1,18 @@
 import { ToolId } from '../tool/tool-id';
 import { DrawCommand } from '../command/draw-command';
-import { TextureLayer } from '../layer/texture-layer';
 import { Layer } from '../layer/layer';
 import { CommandQueue } from '../command/command-queue';
-import { DrawingSurface } from '../layer/drawing-surface';
 import { ToolState } from '../tool/tool-state';
 import { BrushCursor } from './brush-cursor';
 import { ClearCommand } from '../command/clear-command';
 import { Command } from '../command/command';
+import { LayerStack } from '../layer/layer-stack';
 
 export class EventRouter {
   private readonly canvas: HTMLCanvasElement;
   private lastPoint: { x: number; y: number } | null = null;
-  private readonly currentLayer: Layer;
+  private readonly layerStack: LayerStack;
+  private readonly currentLayerIndex: number = 0;
   private readonly commandQueue: CommandQueue;
   private readonly toolState: ToolState;
   private readonly brushCursor: BrushCursor;
@@ -36,7 +36,7 @@ export class EventRouter {
       return;
     }
     if (e.key === 'Delete') {
-      const clearCommand = new ClearCommand(this.currentLayer, {
+      const clearCommand = new ClearCommand(this.getCurrentLayer(), {
         x: 0,
         y: 0,
         width: this.canvas.width,
@@ -50,11 +50,11 @@ export class EventRouter {
 
   constructor(
     canvas: HTMLCanvasElement,
-    surface: DrawingSurface,
+    layerStack: LayerStack,
     toolState: ToolState,
     brushCursor: BrushCursor,
   ) {
-    this.currentLayer = new TextureLayer('Layer01', surface);
+    this.layerStack = layerStack;
     this.canvas = canvas;
     this.commandQueue = new CommandQueue();
     this.toolState = toolState;
@@ -62,7 +62,7 @@ export class EventRouter {
     this.canvas.addEventListener('pointerdown', e => {
       this.onPointerDown(e);
       const currentTool = this.toolState.getCurrentTool();
-      const command = currentTool.createCommand(this.currentLayer);
+      const command = currentTool.createCommand(this.getCurrentLayer());
       this.commandQueue.enqueue(command);
       this.activeStroke = command;
       command.onPointerDown(e);
@@ -112,7 +112,7 @@ export class EventRouter {
   }
 
   getCurrentLayer(): Layer {
-    return this.currentLayer;
+    return this.layerStack.getLayers()[this.currentLayerIndex];
   }
 
   getCurrentCommand(): Command | null {

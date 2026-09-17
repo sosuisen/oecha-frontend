@@ -3,10 +3,11 @@ import { EventRouter } from './event-router';
 import { ToolId } from '../tool/tool-id';
 import { PenCommand } from '../command/pen-command';
 import { EraserCommand } from '../command/eraser-command';
-import { CanvasSurface } from '../testing/canvas-surface';
+import { CanvasLayerStack } from '../testing/canvas-layer-stack';
 import { ToolState } from '../tool/tool-state';
 import { BrushCursor } from './brush-cursor';
 import { Container } from 'pixi.js';
+import { CanvasSurface } from '../testing/canvas-surface';
 
 interface Point {
   x: number;
@@ -47,7 +48,7 @@ function createEventRouter(
 ): EventRouter {
   const router = new EventRouter(
     canvas,
-    new CanvasSurface(canvas),
+    new CanvasLayerStack(),
     toolState,
     brushCursor,
   );
@@ -240,28 +241,37 @@ describe('EventRouter', () => {
 
     // ポインターをドラッグすると、ストロークがレイヤーに描かれる
     it('draws the stroke on the layer when the pointer is released', () => {
-      canvas.dispatchEvent(
+      const baseCanvas = document.createElement('canvas');
+      const toolState = new ToolState();
+      const router = createEventRouter(baseCanvas, toolState);
+
+      const canvasSurface = router
+        .getCurrentLayer()
+        .getSurface() as CanvasSurface;
+      const ctx = canvasSurface.getContext();
+
+      baseCanvas.dispatchEvent(
         new PointerEvent('pointerdown', { clientX: 0, clientY: 0 }),
       );
-      canvas.dispatchEvent(
+      baseCanvas.dispatchEvent(
         new PointerEvent('pointermove', { clientX: 10, clientY: 10 }),
       );
-      const command = eventRouter.getCurrentCommand();
+      const command = router.getCurrentCommand();
       expect(command).toBeInstanceOf(PenCommand);
       if (!(command instanceof PenCommand)) {
         return;
       }
-      const imageData = canvas.getContext('2d')!.getImageData(0, 0, 1, 1);
+      const imageData = ctx.getImageData(0, 0, 1, 1);
       const [r1, g1, b1] = imageData.data;
       const color1 = (r1 << 16) | (g1 << 8) | b1;
       expect(color1).toBe(PenCommand.DEFAULT_COLOR);
 
-      const imageData2 = canvas.getContext('2d')!.getImageData(10, 10, 1, 1);
+      const imageData2 = ctx.getImageData(10, 10, 1, 1);
       const [r2, g2, b2] = imageData2.data;
       const color2 = (r2 << 16) | (g2 << 8) | b2;
       expect(color2).toBe(PenCommand.DEFAULT_COLOR);
 
-      const imageData3 = canvas.getContext('2d')!.getImageData(0, 5, 1, 1);
+      const imageData3 = ctx.getImageData(0, 5, 1, 1);
       const [r3, g3, b3] = imageData3.data;
       const color3 = (r3 << 16) | (g3 << 8) | b3;
       expect(color3).toBe(0x000000); // no line drawn at this point
@@ -285,16 +295,18 @@ describe('EventRouter', () => {
   describe('clear screen', () => {
     // Deleteキーを押すと、レイヤーの全画面が消去される
     it('clears the entire layer when the Delete key is pressed', () => {
-      const c = document.createElement('canvas');
-      const ctx = c.getContext('2d')!;
+      const baseCanvas = document.createElement('canvas');
+      const toolState = new ToolState();
+      const router = createEventRouter(baseCanvas, toolState);
+
+      const canvasSurface = router
+        .getCurrentLayer()
+        .getSurface() as CanvasSurface;
+      const ctx = canvasSurface.getContext();
       ctx.canvas.width = 100;
       ctx.canvas.height = 100;
       ctx.fillStyle = 'red';
       ctx.fillRect(0, 0, 100, 100);
-
-      const toolState = new ToolState();
-
-      createEventRouter(c, toolState);
 
       window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete' }));
 
