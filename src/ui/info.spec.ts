@@ -50,4 +50,16 @@ describe('info', () => {
     const text = root.children[0] as Text;
     expect(text.text).toBe('Layer 01 [Pen] 2px');
   });
+
+  // レイヤーを切り替えると、表示されるレイヤー名が変わる
+  it('updates the layer name when the current layer changes', () => {
+    const root = new Container();
+    const layerStack = new CanvasLayerStack();
+    const info = new Info(root, new ToolState(), layerStack);
+    info.show();
+    const text = root.children[0] as Text;
+
+    layerStack.select(1);
+    expect(text.text).toBe('Layer 02 [Pen] 2px');
+  });
 });

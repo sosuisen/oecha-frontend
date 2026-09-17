@@ -25,6 +25,9 @@ export class Info {
     this.toolState.on('change', () => {
       this.infoText.text = this.getToolInfo();
     });
+    this.layerStack.on('change', () => {
+      this.infoText.text = this.getToolInfo();
+    });
 
     this.infoText = new Text({
       text: this.getToolInfo(),
