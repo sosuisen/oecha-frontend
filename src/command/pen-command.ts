@@ -2,7 +2,7 @@ import { DrawCommand } from './draw-command';
 import { Layer } from '../layer/layer';
 
 export class PenCommand implements DrawCommand {
-  static readonly DEFAULT_COLOR: number = 0xffffff;
+  private color: number = 0xffffff;
   private readonly targetLayer: Layer;
 
   private readonly points: { x: number; y: number }[] = [];
@@ -24,6 +24,14 @@ export class PenCommand implements DrawCommand {
 
   getSize(): number {
     return this.size;
+  }
+
+  setColor(color: number): void {
+    this.color = color;
+  }
+
+  getColor(): number {
+    return this.color;
   }
 
   addPoint(x: number, y: number): void {
@@ -56,7 +64,7 @@ export class PenCommand implements DrawCommand {
       this.points[this.nextSegment + 1],
       {
         blendMode: 'normal',
-        color: PenCommand.DEFAULT_COLOR,
+        color: this.color,
         size: this.size,
       },
     );
@@ -74,7 +82,7 @@ export class PenCommand implements DrawCommand {
     for (let i = 0; i < this.points.length - 1; i++) {
       this.targetLayer.drawLine(this.points[i], this.points[i + 1], {
         blendMode: 'normal',
-        color: PenCommand.DEFAULT_COLOR,
+        color: this.color,
         size: this.size,
       });
     }

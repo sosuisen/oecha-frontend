@@ -10,7 +10,8 @@ describe('info', () => {
   // 情報を画面に表示することができる
   it('should be show on the screen', () => {
     const root = new Container();
-    const info = new Info(root, new ToolState(), new CanvasLayerStack());
+    const layerStack = new CanvasLayerStack();
+    const info = new Info(root, new ToolState(layerStack), layerStack);
     info.show();
     expect(root.children.length).toBe(1);
   });
@@ -18,7 +19,8 @@ describe('info', () => {
   // 情報のテキストを変更することができる
   it('should be able to change the text', () => {
     const root = new Container();
-    const info = new Info(root, new ToolState(), new CanvasLayerStack());
+    const layerStack = new CanvasLayerStack();
+    const info = new Info(root, new ToolState(layerStack), layerStack);
     info.show();
     info.setText('New Info');
     const text = root.children[0] as Text;
@@ -28,9 +30,10 @@ describe('info', () => {
   // ツールの状態が変化すると、ツールの情報を表示する。
   it('should update the text when the tool state changes', () => {
     const root = new Container();
-    const toolState = new ToolState();
+    const layerStack = new CanvasLayerStack();
+    const toolState = new ToolState(layerStack);
     toolState.set(ToolId.Pen);
-    const info = new Info(root, toolState, new CanvasLayerStack());
+    const info = new Info(root, toolState, layerStack);
     info.show();
     info.setText('Initial Info');
 
@@ -45,7 +48,8 @@ describe('info', () => {
   // 現在のレイヤー名が、ツール情報の手前に表示される
   it('shows the current layer name before the tool info', () => {
     const root = new Container();
-    const info = new Info(root, new ToolState(), new CanvasLayerStack());
+    const layerStack = new CanvasLayerStack();
+    const info = new Info(root, new ToolState(layerStack), layerStack);
     info.show();
     const text = root.children[0] as Text;
     expect(text.text).toBe('Layer 01 [Pen] 2px');
@@ -55,7 +59,7 @@ describe('info', () => {
   it('updates the layer name when the current layer changes', () => {
     const root = new Container();
     const layerStack = new CanvasLayerStack();
-    const info = new Info(root, new ToolState(), layerStack);
+    const info = new Info(root, new ToolState(layerStack), layerStack);
     info.show();
     const text = root.children[0] as Text;
 

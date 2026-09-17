@@ -36,7 +36,7 @@ import { TextureLayer } from './layer/texture-layer';
     app.stage.addChild(layer.layerSprite);
   });
 
-  const toolState = new ToolState();
+  const toolState = new ToolState(layerStack);
   const brushCursorContainer = new Container();
   const brushCursor = new BrushCursor(brushCursorContainer, toolState);
   new EventRouter(app.canvas, layerStack, toolState, brushCursor);
