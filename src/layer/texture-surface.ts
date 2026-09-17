@@ -17,9 +17,16 @@ export class TextureSurface implements DrawingSurface {
   // so the brush is drawn as a child of this parent.
   private readonly scene = new Container();
 
-  constructor(app: Application, texture: RenderTexture) {
+  constructor(app: Application) {
     this.app = app;
-    this.texture = texture;
+    this.texture = RenderTexture.create({
+      width: app.canvas.width,
+      height: app.canvas.height,
+    });
+  }
+
+  getTexture(): RenderTexture {
+    return this.texture;
   }
 
   drawLine(p1: PointData, p2: PointData, drawOptions: DrawOptions): void {
