@@ -11,6 +11,7 @@ export class CanvasLayerStack implements LayerStack {
   private static readonly LAYER_IDS = ['Layer01', 'Layer02'];
 
   private readonly layers: Layer[];
+  private currentIndex = 0;
 
   constructor(
     canvases: HTMLCanvasElement[] = [createCanvas(), createCanvas()],
@@ -22,5 +23,13 @@ export class CanvasLayerStack implements LayerStack {
 
   getLayers(): Layer[] {
     return this.layers;
+  }
+
+  getCurrentLayer(): Layer {
+    return this.layers[this.currentIndex];
+  }
+
+  select(index: number): void {
+    this.currentIndex = index;
   }
 }

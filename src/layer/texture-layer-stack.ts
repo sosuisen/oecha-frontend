@@ -7,6 +7,7 @@ export class TextureLayerStack implements LayerStack {
   private static readonly LAYER_IDS = ['Layer01', 'Layer02'];
 
   private readonly layers: TextureLayer[];
+  private currentIndex = 0;
 
   constructor(layerFactory: TextureLayerFactory) {
     this.layers = TextureLayerStack.LAYER_IDS.map(id => layerFactory(id));
@@ -14,5 +15,13 @@ export class TextureLayerStack implements LayerStack {
 
   getLayers(): TextureLayer[] {
     return this.layers;
+  }
+
+  getCurrentLayer(): TextureLayer {
+    return this.layers[this.currentIndex];
+  }
+
+  select(index: number): void {
+    this.currentIndex = index;
   }
 }

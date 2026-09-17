@@ -12,7 +12,6 @@ export class EventRouter {
   private readonly canvas: HTMLCanvasElement;
   private lastPoint: { x: number; y: number } | null = null;
   private readonly layerStack: LayerStack;
-  private currentLayerIndex: number = 0;
   private readonly commandQueue: CommandQueue;
   private readonly toolState: ToolState;
   private readonly brushCursor: BrushCursor;
@@ -36,11 +35,11 @@ export class EventRouter {
       return;
     }
     if (e.key === '1') {
-      this.currentLayerIndex = 0;
+      this.layerStack.select(0);
       return;
     }
     if (e.key === '2') {
-      this.currentLayerIndex = 1;
+      this.layerStack.select(1);
       return;
     }
     if (e.key === 'Delete') {
@@ -120,7 +119,7 @@ export class EventRouter {
   }
 
   getCurrentLayer(): Layer {
-    return this.layerStack.getLayers()[this.currentLayerIndex];
+    return this.layerStack.getCurrentLayer();
   }
 
   getCurrentCommand(): Command | null {
