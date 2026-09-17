@@ -4,6 +4,8 @@ import { ToolId } from '../tool/tool-id';
 import { LayerStack } from '../layer/layer-stack';
 
 export class Info {
+  private static readonly FONT_SIZE = 24;
+  private static readonly FONT_COLOR = 0x909090;
   private readonly root: Container;
   private readonly infoText: Text;
   private readonly toolState: ToolState;
@@ -32,8 +34,8 @@ export class Info {
     this.infoText = new Text({
       text: this.getToolInfo(),
       style: {
-        fontSize: 24,
-        fill: 0xffffff,
+        fontSize: Info.FONT_SIZE,
+        fill: Info.FONT_COLOR,
       },
     });
     this.infoText.position.set(10, 10);
