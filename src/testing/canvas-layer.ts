@@ -5,10 +5,12 @@ import { Rect } from '../layer/rect';
 
 export class CanvasLayer implements Layer {
   readonly id: string;
+  readonly name: string;
   private readonly surface: DrawingSurface;
 
-  constructor(id: string, surface: DrawingSurface) {
+  constructor(id: string, name: string, surface: DrawingSurface) {
     this.id = id;
+    this.name = name;
     this.surface = surface;
   }
 

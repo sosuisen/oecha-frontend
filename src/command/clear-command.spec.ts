@@ -14,7 +14,11 @@ describe('ClearCommand', () => {
     ctx.fillStyle = 'red';
     ctx.fillRect(0, 0, 100, 100);
 
-    const layer = new CanvasLayer('Layer01', new CanvasSurface(canvas));
+    const layer = new CanvasLayer(
+      'Layer01',
+      'Layer 01',
+      new CanvasSurface(canvas),
+    );
     const clearCommand = new ClearCommand(layer, {
       x: 10,
       y: 10,

@@ -4,6 +4,7 @@ import { Rect } from './rect';
 
 export interface Layer {
   readonly id: string;
+  readonly name: string;
   drawLine(from: PointData, to: PointData, drawOptions: DrawOptions): void;
   clearRect(rect: Rect): void;
 }

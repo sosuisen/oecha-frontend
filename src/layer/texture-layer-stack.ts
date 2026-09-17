@@ -1,16 +1,21 @@
 import { TextureLayer } from './texture-layer';
 import { LayerStack } from './layer-stack';
 
-export type TextureLayerFactory = (id: string) => TextureLayer;
+export type TextureLayerFactory = (id: string, name: string) => TextureLayer;
 
 export class TextureLayerStack implements LayerStack {
-  private static readonly LAYER_IDS = ['Layer01', 'Layer02'];
+  private static readonly LAYER_DEFS = [
+    { id: 'Layer01', name: 'Layer 01' },
+    { id: 'Layer02', name: 'Layer 02' },
+  ];
 
   private readonly layers: TextureLayer[];
   private currentIndex = 0;
 
   constructor(layerFactory: TextureLayerFactory) {
-    this.layers = TextureLayerStack.LAYER_IDS.map(id => layerFactory(id));
+    this.layers = TextureLayerStack.LAYER_DEFS.map(({ id, name }) =>
+      layerFactory(id, name),
+    );
   }
 
   getLayers(): TextureLayer[] {

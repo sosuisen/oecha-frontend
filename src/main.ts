@@ -23,9 +23,14 @@ import { TextureLayer } from './layer/texture-layer';
 
   document.getElementById('pixi-container')!.appendChild(app.canvas);
 
-  const layerStack = new TextureLayerStack(id => {
+  const layerStack = new TextureLayerStack((id, name) => {
     const surface = new TextureSurface(app);
-    return new TextureLayer(id, surface, new Sprite(surface.getTexture()));
+    return new TextureLayer(
+      id,
+      name,
+      surface,
+      new Sprite(surface.getTexture()),
+    );
   });
   layerStack.getLayers().forEach(layer => {
     app.stage.addChild(layer.layerSprite);
@@ -38,7 +43,7 @@ import { TextureLayer } from './layer/texture-layer';
 
   const infoContainer = new Container();
   app.stage.addChild(infoContainer);
-  const info = new Info(infoContainer, toolState);
+  const info = new Info(infoContainer, toolState, layerStack);
   info.show();
 
   app.stage.addChild(brushCursorContainer);

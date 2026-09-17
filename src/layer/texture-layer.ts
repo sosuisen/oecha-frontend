@@ -5,11 +5,18 @@ import { Rect } from './rect';
 
 export class TextureLayer implements Layer {
   readonly id: string;
+  readonly name: string;
   readonly layerSprite: Sprite;
   private readonly surface: DrawingSurface;
 
-  constructor(id: string, surface: DrawingSurface, layerSprite: Sprite) {
+  constructor(
+    id: string,
+    name: string,
+    surface: DrawingSurface,
+    layerSprite: Sprite,
+  ) {
     this.id = id;
+    this.name = name;
     this.surface = surface;
     this.layerSprite = layerSprite;
   }

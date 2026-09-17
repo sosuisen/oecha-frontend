@@ -9,6 +9,7 @@ describe('Layer', () => {
   it('returns the ID given to the constructor', () => {
     const layer = new TextureLayer(
       'Layer01',
+      'Layer 01',
       new CanvasSurface(document.createElement('canvas')),
       new Sprite(),
     );

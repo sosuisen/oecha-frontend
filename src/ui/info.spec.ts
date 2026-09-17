@@ -3,13 +3,14 @@ import { Container, Text } from 'pixi.js';
 import { Info } from './info';
 import { ToolState } from '../tool/tool-state';
 import { ToolId } from '../tool/tool-id';
+import { CanvasLayerStack } from '../testing/canvas-layer-stack';
 
 // Test suite for the info module
 describe('info', () => {
   // 情報を画面に表示することができる
   it('should be show on the screen', () => {
     const root = new Container();
-    const info = new Info(root, new ToolState());
+    const info = new Info(root, new ToolState(), new CanvasLayerStack());
     info.show();
     expect(root.children.length).toBe(1);
   });
@@ -17,7 +18,7 @@ describe('info', () => {
   // 情報のテキストを変更することができる
   it('should be able to change the text', () => {
     const root = new Container();
-    const info = new Info(root, new ToolState());
+    const info = new Info(root, new ToolState(), new CanvasLayerStack());
     info.show();
     info.setText('New Info');
     const text = root.children[0] as Text;
@@ -29,15 +30,24 @@ describe('info', () => {
     const root = new Container();
     const toolState = new ToolState();
     toolState.set(ToolId.Pen);
-    const info = new Info(root, toolState);
+    const info = new Info(root, toolState, new CanvasLayerStack());
     info.show();
     info.setText('Initial Info');
 
     const text = root.children[0] as Text;
     toolState.set(ToolId.Eraser);
     toolState.getCurrentTool().sizeSettings.set(50);
-    expect(text.text).toBe('[Eraser] 50px');
+    expect(text.text).toBe('Layer 01 [Eraser] 50px');
     toolState.getCurrentTool().sizeSettings.set(100);
-    expect(text.text).toBe('[Eraser] 100px');
+    expect(text.text).toBe('Layer 01 [Eraser] 100px');
+  });
+
+  // 現在のレイヤー名が、ツール情報の手前に表示される
+  it('shows the current layer name before the tool info', () => {
+    const root = new Container();
+    const info = new Info(root, new ToolState(), new CanvasLayerStack());
+    info.show();
+    const text = root.children[0] as Text;
+    expect(text.text).toBe('Layer 01 [Pen] 2px');
   });
 });

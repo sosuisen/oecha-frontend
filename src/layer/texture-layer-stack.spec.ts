@@ -9,9 +9,10 @@ describe('TextureLayerStack', () => {
   // 初期状態で2枚のレイヤーを持つ
   it('has two layers initially', () => {
     const layerStack = new TextureLayerStack(
-      id =>
+      (id, name) =>
         new TextureLayer(
           id,
+          name,
           new CanvasSurface(document.createElement('canvas')),
           new Sprite(),
         ),

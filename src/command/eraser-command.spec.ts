@@ -12,6 +12,7 @@ describe('EraserCommand', () => {
     const eraserCommand = new EraserCommand(
       new CanvasLayer(
         'Layer01',
+        'Layer 01',
         new CanvasSurface(document.createElement('canvas')),
       ),
     );
@@ -21,7 +22,11 @@ describe('EraserCommand', () => {
   // drawNextSegment() は、2点間の線分で消去する
   it('draws a line segment between the last two points when drawNextSegment is called', () => {
     const canvas = document.createElement('canvas');
-    const layer = new CanvasLayer('Layer01', new CanvasSurface(canvas));
+    const layer = new CanvasLayer(
+      'Layer01',
+      'Layer 01',
+      new CanvasSurface(canvas),
+    );
     const ctx = canvas.getContext('2d')!;
     ctx.canvas.width = 20;
     ctx.canvas.height = 20;
@@ -51,6 +56,7 @@ describe('EraserCommand', () => {
     const eraserCommand = new EraserCommand(
       new CanvasLayer(
         'Layer01',
+        'Layer 01',
         new CanvasSurface(document.createElement('canvas')),
       ),
     );

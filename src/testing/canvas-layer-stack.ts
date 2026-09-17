@@ -8,7 +8,10 @@ function createCanvas(): HTMLCanvasElement {
 }
 
 export class CanvasLayerStack implements LayerStack {
-  private static readonly LAYER_IDS = ['Layer01', 'Layer02'];
+  private static readonly LAYER_DEFS = [
+    { id: 'Layer01', name: 'Layer 01' },
+    { id: 'Layer02', name: 'Layer 02' },
+  ];
 
   private readonly layers: Layer[];
   private currentIndex = 0;
@@ -16,8 +19,9 @@ export class CanvasLayerStack implements LayerStack {
   constructor(
     canvases: HTMLCanvasElement[] = [createCanvas(), createCanvas()],
   ) {
-    this.layers = CanvasLayerStack.LAYER_IDS.map(
-      (id, i) => new CanvasLayer(id, new CanvasSurface(canvases[i])),
+    this.layers = CanvasLayerStack.LAYER_DEFS.map(
+      ({ id, name }, i) =>
+        new CanvasLayer(id, name, new CanvasSurface(canvases[i])),
     );
   }
 
