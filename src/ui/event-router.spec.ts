@@ -373,5 +373,39 @@ describe('EventRouter', () => {
       window.dispatchEvent(new KeyboardEvent('keydown', { key: '1' }));
       expect(eventRouter.getCurrentLayer().id).toBe('Layer01');
     });
+
+    // 2キーでレイヤーを切り替えてから線を引くと、2枚目のレイヤーにだけ描かれる
+    it('draws the stroke only on the second layer after switching with the 2 key', () => {
+      const baseCanvas = document.createElement('canvas');
+      const layerCanvas1 = document.createElement('canvas');
+      const layerCanvas2 = document.createElement('canvas');
+      createEventRouter(
+        baseCanvas,
+        new ToolState(),
+        createBrushCursor(),
+        new CanvasLayerStack([layerCanvas1, layerCanvas2]),
+      );
+
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: '2' }));
+      baseCanvas.dispatchEvent(
+        createPointerEvent('pointerdown', { x: 0, y: 0 }),
+      );
+      baseCanvas.dispatchEvent(
+        createPointerEvent('pointermove', { x: 10, y: 10 }),
+      );
+      baseCanvas.dispatchEvent(
+        createPointerEvent('pointerup', { x: 10, y: 10 }),
+      );
+
+      const [, , , alpha1] = layerCanvas1
+        .getContext('2d')!
+        .getImageData(5, 5, 1, 1).data;
+      expect(alpha1).toBe(0);
+
+      const [, , , alpha2] = layerCanvas2
+        .getContext('2d')!
+        .getImageData(5, 5, 1, 1).data;
+      expect(alpha2).toBeGreaterThan(0);
+    });
   });
 });
