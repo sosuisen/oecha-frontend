@@ -14,10 +14,6 @@ export class TextureLayer implements Layer {
     this.layerSprite = layerSprite;
   }
 
-  getSurface(): DrawingSurface {
-    return this.surface;
-  }
-
   drawLine(from: PointData, to: PointData, drawOptions: DrawOptions): void {
     this.surface.drawLine(from, to, drawOptions);
   }

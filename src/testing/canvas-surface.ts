@@ -16,10 +16,6 @@ export class CanvasSurface implements DrawingSurface {
     this.ctx = ctx;
   }
 
-  getContext(): CanvasRenderingContext2D {
-    return this.ctx;
-  }
-
   /**
    * Draws a line segment on the canvas.
    * @param p1 - Starting point of the line

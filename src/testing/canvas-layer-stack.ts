@@ -3,21 +3,20 @@ import { LayerStack } from '../layer/layer-stack';
 import { CanvasLayer } from './canvas-layer';
 import { CanvasSurface } from './canvas-surface';
 
-export class CanvasLayerStack implements LayerStack {
-  private readonly layers: Layer[] = [];
+function createCanvas(): HTMLCanvasElement {
+  return document.createElement('canvas');
+}
 
-  constructor() {
-    this.layers.push(
-      new CanvasLayer(
-        'Layer01',
-        new CanvasSurface(document.createElement('canvas')),
-      ),
-    );
-    this.layers.push(
-      new CanvasLayer(
-        'Layer02',
-        new CanvasSurface(document.createElement('canvas')),
-      ),
+export class CanvasLayerStack implements LayerStack {
+  private static readonly LAYER_IDS = ['Layer01', 'Layer02'];
+
+  private readonly layers: Layer[];
+
+  constructor(
+    canvases: HTMLCanvasElement[] = [createCanvas(), createCanvas()],
+  ) {
+    this.layers = CanvasLayerStack.LAYER_IDS.map(
+      (id, i) => new CanvasLayer(id, new CanvasSurface(canvases[i])),
     );
   }
 

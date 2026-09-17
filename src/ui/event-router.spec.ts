@@ -7,7 +7,6 @@ import { CanvasLayerStack } from '../testing/canvas-layer-stack';
 import { ToolState } from '../tool/tool-state';
 import { BrushCursor } from './brush-cursor';
 import { Container } from 'pixi.js';
-import { CanvasSurface } from '../testing/canvas-surface';
 
 interface Point {
   x: number;
@@ -45,13 +44,9 @@ function createEventRouter(
   canvas: HTMLCanvasElement,
   toolState: ToolState = new ToolState(),
   brushCursor: BrushCursor = createBrushCursor(),
+  layerStack: CanvasLayerStack = new CanvasLayerStack(),
 ): EventRouter {
-  const router = new EventRouter(
-    canvas,
-    new CanvasLayerStack(),
-    toolState,
-    brushCursor,
-  );
+  const router = new EventRouter(canvas, layerStack, toolState, brushCursor);
   routers.push(router);
   return router;
 }
@@ -242,13 +237,14 @@ describe('EventRouter', () => {
     // ポインターをドラッグすると、ストロークがレイヤーに描かれる
     it('draws the stroke on the layer when the pointer is released', () => {
       const baseCanvas = document.createElement('canvas');
-      const toolState = new ToolState();
-      const router = createEventRouter(baseCanvas, toolState);
-
-      const canvasSurface = router
-        .getCurrentLayer()
-        .getSurface() as CanvasSurface;
-      const ctx = canvasSurface.getContext();
+      const layerCanvas = document.createElement('canvas');
+      const router = createEventRouter(
+        baseCanvas,
+        new ToolState(),
+        createBrushCursor(),
+        new CanvasLayerStack([layerCanvas, document.createElement('canvas')]),
+      );
+      const ctx = layerCanvas.getContext('2d')!;
 
       baseCanvas.dispatchEvent(
         new PointerEvent('pointerdown', { clientX: 0, clientY: 0 }),
@@ -296,13 +292,14 @@ describe('EventRouter', () => {
     // Deleteキーを押すと、レイヤーの全画面が消去される
     it('clears the entire layer when the Delete key is pressed', () => {
       const baseCanvas = document.createElement('canvas');
-      const toolState = new ToolState();
-      const router = createEventRouter(baseCanvas, toolState);
-
-      const canvasSurface = router
-        .getCurrentLayer()
-        .getSurface() as CanvasSurface;
-      const ctx = canvasSurface.getContext();
+      const layerCanvas = document.createElement('canvas');
+      createEventRouter(
+        baseCanvas,
+        new ToolState(),
+        createBrushCursor(),
+        new CanvasLayerStack([layerCanvas, document.createElement('canvas')]),
+      );
+      const ctx = layerCanvas.getContext('2d')!;
       ctx.canvas.width = 100;
       ctx.canvas.height = 100;
       ctx.fillStyle = 'red';

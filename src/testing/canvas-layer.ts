@@ -12,10 +12,6 @@ export class CanvasLayer implements Layer {
     this.surface = surface;
   }
 
-  getSurface(): DrawingSurface {
-    return this.surface;
-  }
-
   drawLine(from: PointData, to: PointData, drawOptions: DrawOptions): void {
     this.surface.drawLine(from, to, drawOptions);
   }
