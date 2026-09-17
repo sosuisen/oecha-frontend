@@ -25,6 +25,15 @@ export class EventRouter {
     }
     if (e.key === 'x' || e.key === 'X') {
       this.toolState.toggle();
+      return;
+    }
+    if (e.key === 'p' || e.key === 'P') {
+      this.toolState.set(ToolId.Pen);
+      return;
+    }
+    if (e.key === 'e' || e.key === 'E') {
+      this.toolState.set(ToolId.Eraser);
+      return;
     }
     if (e.key === 'Delete') {
       const clearCommand = new ClearCommand(this.currentLayer, {
@@ -35,6 +44,7 @@ export class EventRouter {
       });
       this.commandQueue.enqueue(clearCommand);
       this.commandQueue.step();
+      return;
     }
   };
 

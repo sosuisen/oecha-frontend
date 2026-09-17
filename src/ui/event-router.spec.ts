@@ -82,6 +82,12 @@ describe('EventRouter', () => {
       expect(eventRouter.getCurrentTool()).toBe(ToolId.Eraser);
       window.dispatchEvent(xKeyEvent);
       expect(eventRouter.getCurrentTool()).toBe(ToolId.Pen);
+
+      const XKeyEvent = new KeyboardEvent('keydown', { key: 'X' });
+      window.dispatchEvent(XKeyEvent);
+      expect(eventRouter.getCurrentTool()).toBe(ToolId.Eraser);
+      window.dispatchEvent(XKeyEvent);
+      expect(eventRouter.getCurrentTool()).toBe(ToolId.Pen);
     });
 
     // ツールをトグルすると、ToolStateのchangeイベントが発火する
@@ -94,6 +100,40 @@ describe('EventRouter', () => {
       const xKeyEvent = new KeyboardEvent('keydown', { key: 'x' });
       window.dispatchEvent(xKeyEvent);
       expect(invoked).toBe(true);
+    });
+
+    // Pキーを押すと、ペンツールが選択される
+    it('selects the pen tool when the P key is pressed', () => {
+      const c = document.createElement('canvas');
+      const toolState = new ToolState();
+      toolState.set(ToolId.Eraser);
+      const router = createEventRouter(c, toolState);
+
+      const pKeyEvent = new KeyboardEvent('keydown', { key: 'p' });
+      window.dispatchEvent(pKeyEvent);
+      expect(router.getCurrentTool()).toBe(ToolId.Pen);
+
+      toolState.set(ToolId.Eraser);
+      const PKeyEvent = new KeyboardEvent('keydown', { key: 'P' });
+      window.dispatchEvent(PKeyEvent);
+      expect(router.getCurrentTool()).toBe(ToolId.Pen);
+    });
+
+    // Eキーを押すと、消しゴムツールが選択される
+    it('selects the eraser tool when the E key is pressed', () => {
+      const c = document.createElement('canvas');
+      const toolState = new ToolState();
+      toolState.set(ToolId.Pen);
+      const router = createEventRouter(c, toolState);
+
+      const eKeyEvent = new KeyboardEvent('keydown', { key: 'e' });
+      window.dispatchEvent(eKeyEvent);
+      expect(router.getCurrentTool()).toBe(ToolId.Eraser);
+
+      toolState.set(ToolId.Pen);
+      const EKeyEvent = new KeyboardEvent('keydown', { key: 'E' });
+      window.dispatchEvent(EKeyEvent);
+      expect(router.getCurrentTool()).toBe(ToolId.Eraser);
     });
   });
 
