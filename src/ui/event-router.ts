@@ -86,6 +86,9 @@ export class EventRouter {
         this.activeStroke = null;
       }
     });
+    this.canvas.addEventListener('contextmenu', e => {
+      e.preventDefault();
+    });
     this.canvas.addEventListener('wheel', e => {
       this.toolState.getCurrentTool().onWheel?.(e);
     });

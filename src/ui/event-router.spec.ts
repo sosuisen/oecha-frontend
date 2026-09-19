@@ -428,4 +428,17 @@ describe('EventRouter', () => {
       expect(alpha2).toBeGreaterThan(0);
     });
   });
+
+  describe('context menu', () => {
+    // 右クリックでブラウザのコンテキストメニューが表示されない
+    it('prevents the default context menu from appearing on right-click', () => {
+      const event = new MouseEvent('contextmenu', {
+        bubbles: true,
+        cancelable: true,
+        button: 2,
+      });
+      const notPrevented = canvas.dispatchEvent(event);
+      expect(notPrevented).toBe(false);
+    });
+  });
 });
