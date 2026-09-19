@@ -90,6 +90,7 @@ export class EventRouter {
       e.preventDefault();
     });
     this.canvas.addEventListener('wheel', e => {
+      e.preventDefault();
       this.toolState.getCurrentTool().onWheel?.(e);
     });
     window.addEventListener('keydown', this.onKeyDown);

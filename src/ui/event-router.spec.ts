@@ -441,4 +441,17 @@ describe('EventRouter', () => {
       expect(notPrevented).toBe(false);
     });
   });
+
+  describe('wheel', () => {
+    // ブラウザ側にWheelイベントが伝播しない
+    it('prevents the default wheel event from propagating to the browser', () => {
+      const event = new WheelEvent('wheel', {
+        bubbles: true,
+        cancelable: true,
+        deltaY: 100,
+      });
+      const notPrevented = canvas.dispatchEvent(event);
+      expect(notPrevented).toBe(false);
+    });
+  });
 });
