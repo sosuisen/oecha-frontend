@@ -12,7 +12,6 @@ import { TextureLayer } from './layer/texture-layer';
   const app = new Application();
   await app.init({
     background: DEFAULT_BACKGROUND_COLOR,
-    // resizeTo: window,
     width: DEFAULT_CANVAS_SIZE.width,
     height: DEFAULT_CANVAS_SIZE.height,
     antialias: true,
