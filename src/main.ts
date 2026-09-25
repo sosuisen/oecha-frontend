@@ -1,7 +1,7 @@
 import { Application, Container, Sprite } from 'pixi.js';
 import { EventRouter } from './ui/event-router';
 import { TextureSurface } from './layer/texture-surface';
-import { DEFAULT_BACKGROUND_COLOR } from './ui/background';
+import { DEFAULT_BACKGROUND_COLOR, DEFAULT_CANVAS_SIZE } from './ui/background';
 import { Info } from './ui/info';
 import { ToolState } from './tool/tool-state';
 import { BrushCursor } from './ui/brush-cursor';
@@ -12,7 +12,9 @@ import { TextureLayer } from './layer/texture-layer';
   const app = new Application();
   await app.init({
     background: DEFAULT_BACKGROUND_COLOR,
-    resizeTo: window,
+    // resizeTo: window,
+    width: DEFAULT_CANVAS_SIZE.width,
+    height: DEFAULT_CANVAS_SIZE.height,
     antialias: true,
   });
   app.stage.eventMode = 'static';
