@@ -76,7 +76,9 @@ export class EventRouter {
     });
     this.canvas.addEventListener('pointermove', e => {
       this.onPointerMove(e);
-      this.activeStroke?.onPointerMove(e);
+      for (const coalesced of this.coalescedEventOf(e)) {
+        this.activeStroke?.onPointerMove(coalesced);
+      }
     });
     this.canvas.addEventListener('pointerup', e => {
       this.onPointerUp(e);
@@ -98,6 +100,11 @@ export class EventRouter {
 
   destroy() {
     window.removeEventListener('keydown', this.onKeyDown);
+  }
+
+  private coalescedEventOf(event: PointerEvent): PointerEvent[] {
+    const events = event.getCoalescedEvents?.() ?? []; // for jsdom compatibility
+    return events.length > 0 ? events : [event]; // if getCoalescedEvents is not supported, return the original event
   }
 
   onPointerDown(event: PointerEvent): void {
