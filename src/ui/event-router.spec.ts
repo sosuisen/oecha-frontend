@@ -227,6 +227,28 @@ describe('EventRouter', () => {
       }
     });
 
+    // 1回のpointermoveに合体された複数の点が、すべてストロークに記録される。
+    it('records every coalesced point of a single pointermove event', () => {
+      canvas.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
+
+      const move = createPointerEvent('pointermove', { x: 2, y: 2 });
+      // jsdom's PointerEvent does not support getCoalescedEvents, so we need to mock it.
+      Object.defineProperty(move, 'getCoalescedEvents', {
+        value: () => [
+          createPointerEvent('pointermove', { x: 1, y: 1 }),
+          createPointerEvent('pointermove', { x: 2, y: 2 }),
+        ],
+      });
+      canvas.dispatchEvent(move);
+
+      const command = eventRouter.getCurrentCommand() as PenCommand;
+      expect(command.getPoints()).toEqual([
+        { x: 0, y: 0 },
+        { x: 1, y: 1 },
+        { x: 2, y: 2 },
+      ]);
+    });
+
     // pointerdownイベントごとに異なる PenCommand が生成される
     it('creates a new PenCommand for each pointerdown event', () => {
       canvas.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
