@@ -1,6 +1,10 @@
 # ペンの色を変える
 - [x] R,G,Bのテキストフィールドに直接値入力
 
+# スポイトで色を取る
+- [ ] Altキー押下中は一時的にスポイトモード
+- [ ] スポイトツールの選択
+
 # TextureSurface
 - [ ] TextureSurfaceのテストを書く（PixiJS 8.20のCanvasRendererを使う）。
     - [ ] spike: jsdom上で `app.init({ preference: 'canvas', autoStart: false })` が通るか確認する。
