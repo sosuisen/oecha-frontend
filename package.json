@@ -8,7 +8,7 @@
     "build": "npm run lint && tsc && vite build",
     "lint": "eslint .",
     "dev": "vite",
-    "test": "vitest"
+    "test": "tsc --noEmit && vitest"
   },
   "dependencies": {
     "@pixi/ui": "^2.4.1",
