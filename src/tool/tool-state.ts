@@ -5,7 +5,7 @@ import { PenTool } from './pen-tool';
 import { EraserTool } from './eraser-tool';
 
 export type ToolStateEvents = {
-  change: [{ tool: ToolId; size: number }];
+  change: [{ tool: ToolId; size: number; color: number }];
 };
 
 export class ToolState extends EventEmitter<ToolStateEvents> {
@@ -23,7 +23,11 @@ export class ToolState extends EventEmitter<ToolStateEvents> {
     super();
     for (const tool of Object.values(this.tools)) {
       tool.sizeSettings.on('change', size =>
-        this.emit('change', { tool: this.currentTool, size }),
+        this.emit('change', {
+          tool: this.currentTool,
+          size,
+          color: this.currentColor,
+        }),
       );
     }
     this.setCurrentColor(ToolState.INITIAL_COLOR);
@@ -38,7 +42,11 @@ export class ToolState extends EventEmitter<ToolStateEvents> {
       return;
     }
     this.currentTool = tool;
-    this.emit('change', { tool, size: this.tools[tool].sizeSettings.get() });
+    this.emit('change', {
+      tool,
+      size: this.tools[tool].sizeSettings.get(),
+      color: this.currentColor,
+    });
   }
 
   getCurrentColor(): number {
@@ -48,6 +56,11 @@ export class ToolState extends EventEmitter<ToolStateEvents> {
   setCurrentColor(color: number): void {
     this.currentColor = color;
     (this.tools[ToolId.Pen] as PenTool).setColor(color);
+    this.emit('change', {
+      tool: this.currentTool,
+      size: this.tools[this.currentTool].sizeSettings.get(),
+      color: this.currentColor,
+    });
   }
 
   getCurrentTool(): Tool {

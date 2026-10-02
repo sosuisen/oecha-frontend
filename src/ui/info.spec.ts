@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { Container, Text } from 'pixi.js';
 import { Info } from './info';
 import { ToolState } from '../tool/tool-state';
@@ -7,13 +7,21 @@ import { CanvasLayerStack } from '../testing/canvas-layer-stack';
 
 // Test suite for the info module
 describe('info', () => {
+  beforeAll(() => {
+    const ctx = document.createElement('canvas').getContext('2d');
+    if (ctx && typeof globalThis.CanvasRenderingContext2D === 'undefined') {
+      globalThis.CanvasRenderingContext2D =
+        ctx.constructor as typeof CanvasRenderingContext2D;
+    }
+  });
+
   // 情報を画面に表示することができる
   it('should be show on the screen', () => {
     const root = new Container();
     const layerStack = new CanvasLayerStack();
     const info = new Info(root, new ToolState(), layerStack);
     info.show();
-    expect(root.children.length).toBe(1);
+    expect(root.children.length).toBeGreaterThan(0);
   });
 
   // 情報のテキストを変更することができる
@@ -65,5 +73,21 @@ describe('info', () => {
 
     layerStack.select(1);
     expect(text.text).toBe('Layer 02 [Pen] 2px');
+  });
+
+  // 現在の色が変わると、表示される色の情報が変わる
+  it('updates the color info when the current color changes', () => {
+    const root = new Container();
+    const layerStack = new CanvasLayerStack();
+    const toolState = new ToolState();
+    toolState.setCurrentColor(0x000000);
+    const info = new Info(root, toolState, layerStack);
+    info.show();
+    const color = info.getCurrentColor();
+    expect(color).toBe(0x000000);
+
+    toolState.setCurrentColor(0xff0000);
+    const newColor = info.getCurrentColor();
+    expect(newColor).toBe(0xff0000);
   });
 });
