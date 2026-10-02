@@ -134,6 +134,28 @@ describe('EventRouter', () => {
       window.dispatchEvent(EKeyEvent);
       expect(router.getCurrentTool()).toBe(ToolId.Eraser);
     });
+
+    // Altキーを押している間は、カラーピッキングモードに切り替わる
+    it('switches to color picking mode while the Alt key is pressed', () => {
+      const c = document.createElement('canvas');
+      const layerStack = new CanvasLayerStack();
+      const toolState = new ToolState();
+      const router = createEventRouter(c, layerStack, toolState);
+
+      const altKeyDownEvent = new KeyboardEvent('keydown', {
+        key: 'Alt',
+        altKey: true,
+      });
+      window.dispatchEvent(altKeyDownEvent);
+      expect(router.isColorPickingMode()).toBe(true);
+
+      const altKeyUpEvent = new KeyboardEvent('keyup', {
+        key: 'Alt',
+        altKey: false,
+      });
+      window.dispatchEvent(altKeyUpEvent);
+      expect(router.isColorPickingMode()).toBe(false);
+    });
   });
 
   // ツールの設定変更

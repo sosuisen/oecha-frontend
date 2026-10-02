@@ -64,4 +64,30 @@ export class CanvasSurface implements DrawingSurface {
   clearRect(rect: Rect): void {
     this.ctx.clearRect(rect.x, rect.y, rect.width, rect.height);
   }
+
+  /**
+   * Gets the color of the pixel at the specified coordinates.
+   * Behaves like TextureSurface.getColorAt so tests can rely on the same contract.
+   * @param x - The x-coordinate. Fractions are dropped.
+   * @param y - The y-coordinate. Fractions are dropped.
+   * @returns The color as 0xRRGGBB, or null when the point is outside the
+   * canvas or nothing is drawn there.
+   */
+  getColorAt(x: number, y: number): number | null {
+    const px = Math.floor(x);
+    const py = Math.floor(y);
+    if (
+      px < 0 ||
+      px >= this.canvas.width ||
+      py < 0 ||
+      py >= this.canvas.height
+    ) {
+      return null;
+    }
+    const [r, g, b, a] = this.ctx.getImageData(px, py, 1, 1).data;
+    if (a === 0) {
+      return null; // nothing is drawn here
+    }
+    return (r << 16) | (g << 8) | b;
+  }
 }

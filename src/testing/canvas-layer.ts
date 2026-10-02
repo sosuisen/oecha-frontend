@@ -21,4 +21,8 @@ export class CanvasLayer implements Layer {
   clearRect(rect: Rect): void {
     this.surface.clearRect(rect);
   }
+
+  getColorAt(x: number, y: number): number | null {
+    return this.surface.getColorAt(x, y);
+  }
 }

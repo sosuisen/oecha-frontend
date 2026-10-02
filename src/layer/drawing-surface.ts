@@ -11,4 +11,5 @@ export type DrawOptions = { blendMode: string; color: number; size: number };
 export interface DrawingSurface {
   drawLine(p1: PointData, p2: PointData, drawOptions: DrawOptions): void;
   clearRect(rect: Rect): void;
+  getColorAt(x: number, y: number): number | null;
 }

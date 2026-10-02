@@ -7,4 +7,5 @@ export interface Layer {
   readonly name: string;
   drawLine(from: PointData, to: PointData, drawOptions: DrawOptions): void;
   clearRect(rect: Rect): void;
+  getColorAt(x: number, y: number): number | null;
 }

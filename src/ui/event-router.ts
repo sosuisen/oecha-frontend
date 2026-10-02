@@ -15,11 +15,17 @@ export class EventRouter {
   private readonly commandQueue: CommandQueue;
   private readonly toolState: ToolState;
   private readonly brushCursor: BrushCursor;
+  private colorPickingMode: boolean = false;
 
   private activeStroke: DrawCommand | null = null;
 
   private readonly onKeyDown = (e: KeyboardEvent) => {
     if (e.repeat) {
+      return;
+    }
+    if (e.altKey) {
+      e.preventDefault();
+      this.colorPickingMode = true;
       return;
     }
     if (e.key === 'x' || e.key === 'X') {
@@ -55,6 +61,14 @@ export class EventRouter {
     }
   };
 
+  private readonly onKeyUp = (e: KeyboardEvent) => {
+    if (e.key === 'Alt') {
+      e.preventDefault();
+      this.colorPickingMode = false;
+      return;
+    }
+  };
+
   constructor(
     canvas: HTMLCanvasElement,
     layerStack: LayerStack,
@@ -67,6 +81,14 @@ export class EventRouter {
     this.toolState = toolState;
     this.brushCursor = brushCursor;
     this.canvas.addEventListener('pointerdown', e => {
+      if (this.colorPickingMode) {
+        const currentLayer = this.getCurrentLayer();
+        const color = currentLayer.getColorAt(e.clientX, e.clientY);
+        if (color !== null) {
+          this.toolState.setCurrentColor(color);
+        }
+        return;
+      }
       this.onPointerDown(e);
       const currentTool = this.toolState.getCurrentTool();
       const command = currentTool.createCommand(this.getCurrentLayer());
@@ -96,10 +118,12 @@ export class EventRouter {
       this.toolState.getCurrentTool().onWheel?.(e);
     });
     window.addEventListener('keydown', this.onKeyDown);
+    window.addEventListener('keyup', this.onKeyUp);
   }
 
   destroy() {
     window.removeEventListener('keydown', this.onKeyDown);
+    window.removeEventListener('keyup', this.onKeyUp);
   }
 
   private coalescedEventOf(event: PointerEvent): PointerEvent[] {
@@ -139,5 +163,9 @@ export class EventRouter {
 
   getCurrentTool(): ToolId {
     return this.toolState.get();
+  }
+
+  isColorPickingMode(): boolean {
+    return this.colorPickingMode;
   }
 }

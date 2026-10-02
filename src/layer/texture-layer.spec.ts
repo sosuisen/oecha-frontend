@@ -26,4 +26,26 @@ describe('Layer', () => {
     );
     expect(layer.name).toBe('Layer 01');
   });
+
+  // 指定座標の色を取得する
+  it('returns the color of the specified coordinates', () => {
+    const layer = new TextureLayer(
+      'Layer01',
+      'Layer 01',
+      new CanvasSurface(document.createElement('canvas')),
+      new Sprite(),
+    );
+
+    layer.drawLine(
+      { x: 0, y: 0 },
+      { x: 20, y: 20 },
+      {
+        blendMode: 'normal',
+        color: 0xff0000,
+        size: 5,
+      },
+    );
+    const color = layer.getColorAt(10, 10);
+    expect(color).toBe(0xff0000);
+  });
 });

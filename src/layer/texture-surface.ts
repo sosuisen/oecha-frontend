@@ -83,4 +83,34 @@ export class TextureSurface implements DrawingSurface {
     this.scene.removeChild(clearGraphics);
     clearGraphics.destroy();
   }
+
+  /**
+   * Gets the color of the pixel at the specified coordinates.
+   * @param x - The x-coordinate. Fractions are dropped.
+   * @param y - The y-coordinate. Fractions are dropped.
+   * @returns The color as 0xRRGGBB, or null when the point is outside the
+   * texture or nothing is drawn there.
+   */
+  getColorAt(x: number, y: number): number | null {
+    const { pixels, width, height } = this.app.renderer.extract.pixels(
+      this.texture,
+    );
+    // Pointer coordinates can be fractional. A fractional index reads
+    // undefined from the pixel array, which would look like black.
+    const px = Math.floor(x);
+    const py = Math.floor(y);
+    if (px < 0 || px >= width || py < 0 || py >= height) {
+      return null;
+    }
+
+    const index = (py * width + px) * 4;
+    const r = pixels[index];
+    const g = pixels[index + 1];
+    const b = pixels[index + 2];
+    const a = pixels[index + 3];
+    if (a === 0) {
+      return null; // nothing is drawn here
+    }
+    return (r << 16) | (g << 8) | b;
+  }
 }

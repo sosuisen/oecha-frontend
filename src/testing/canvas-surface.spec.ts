@@ -29,4 +29,16 @@ describe('CanvasSurface', () => {
     const color2: number = surface.getPixel(10, 10);
     expect(color2).toBe(0xff0000);
   });
+
+  // getColorAtは指定座標の色を取得する
+  it('should return the color of the specified coordinates', () => {
+    const surface = new CanvasSurface(document.createElement('canvas'));
+    surface.drawLine(
+      { x: 0, y: 0 },
+      { x: 10, y: 10 },
+      { blendMode: 'normal', color: 0xff0000, size: 5 },
+    );
+    const color = surface.getColorAt(5, 5);
+    expect(color).toBe(0xff0000);
+  });
 });
