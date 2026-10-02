@@ -497,4 +497,27 @@ describe('EventRouter', () => {
       expect(notPrevented).toBe(false);
     });
   });
+
+  describe('input', () => {
+    // 入力欄にフォーカスがあるときは、ツールの切り替えやレイヤーの切り替えが行われない
+    it('does not switch tools or layers when an input field is focused', () => {
+      const input = document.createElement('input');
+      document.body.appendChild(input);
+
+      const initialTool = eventRouter.getCurrentTool();
+      const initialLayer = eventRouter.getCurrentLayer();
+
+      input.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'x', bubbles: true }),
+      );
+      input.dispatchEvent(
+        new KeyboardEvent('keydown', { key: '2', bubbles: true }),
+      );
+
+      expect(eventRouter.getCurrentTool()).toBe(initialTool);
+      expect(eventRouter.getCurrentLayer()).toBe(initialLayer);
+
+      document.body.removeChild(input);
+    });
+  });
 });

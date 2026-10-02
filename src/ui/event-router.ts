@@ -23,6 +23,10 @@ export class EventRouter {
     if (e.repeat) {
       return;
     }
+    if (e.target instanceof HTMLInputElement) {
+      return;
+    }
+
     if (e.altKey) {
       e.preventDefault();
       this.colorPickingMode = true;
