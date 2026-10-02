@@ -52,7 +52,7 @@ const createColorInput = () => {
     app.stage.addChild(layer.layerSprite);
   });
 
-  const toolState = new ToolState(layerStack);
+  const toolState = new ToolState();
   const brushCursorContainer = new Container();
   const brushCursor = new BrushCursor(brushCursorContainer, toolState);
   new EventRouter(app.canvas, layerStack, toolState, brushCursor);
