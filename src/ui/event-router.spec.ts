@@ -13,9 +13,9 @@ interface Point {
   y: number;
 }
 
-function createBrushCursor(layerStack: CanvasLayerStack): BrushCursor {
+function createBrushCursor(): BrushCursor {
   const container = new Container();
-  return new BrushCursor(container, new ToolState(layerStack));
+  return new BrushCursor(container, new ToolState());
 }
 
 function createPointerEvent(type: string, point: Point): Event {
@@ -43,8 +43,8 @@ const routers: EventRouter[] = [];
 function createEventRouter(
   canvas: HTMLCanvasElement,
   layerStack: CanvasLayerStack = new CanvasLayerStack(),
-  toolState: ToolState = new ToolState(layerStack),
-  brushCursor: BrushCursor = createBrushCursor(layerStack),
+  toolState: ToolState = new ToolState(),
+  brushCursor: BrushCursor = createBrushCursor(),
 ): EventRouter {
   const router = new EventRouter(canvas, layerStack, toolState, brushCursor);
   routers.push(router);
@@ -90,7 +90,7 @@ describe('EventRouter', () => {
     it('emits a change event when the tool is switched', () => {
       const c = document.createElement('canvas');
       const layerStack = new CanvasLayerStack();
-      const toolState = new ToolState(layerStack);
+      const toolState = new ToolState();
       createEventRouter(c, layerStack, toolState);
       let invoked = false;
       toolState.on('change', () => (invoked = true));
@@ -103,7 +103,7 @@ describe('EventRouter', () => {
     it('selects the pen tool when the P key is pressed', () => {
       const c = document.createElement('canvas');
       const layerStack = new CanvasLayerStack();
-      const toolState = new ToolState(layerStack);
+      const toolState = new ToolState();
       toolState.set(ToolId.Eraser);
       const router = createEventRouter(c, layerStack, toolState);
 
@@ -121,7 +121,7 @@ describe('EventRouter', () => {
     it('selects the eraser tool when the E key is pressed', () => {
       const c = document.createElement('canvas');
       const layerStack = new CanvasLayerStack();
-      const toolState = new ToolState(layerStack);
+      const toolState = new ToolState();
       toolState.set(ToolId.Pen);
       const router = createEventRouter(c, layerStack, toolState);
 
@@ -142,7 +142,7 @@ describe('EventRouter', () => {
     it('increases the pen tool size when the mouse wheel is scrolled up', () => {
       const c = document.createElement('canvas');
       const layerStack = new CanvasLayerStack();
-      const toolState = new ToolState(layerStack);
+      const toolState = new ToolState();
       toolState.set(ToolId.Pen);
       createEventRouter(c, layerStack, toolState);
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
@@ -156,7 +156,7 @@ describe('EventRouter', () => {
     it('decreases the pen tool size when the mouse wheel is scrolled down', () => {
       const c = document.createElement('canvas');
       const layerStack = new CanvasLayerStack();
-      const toolState = new ToolState(layerStack);
+      const toolState = new ToolState();
       toolState.set(ToolId.Pen);
       createEventRouter(c, layerStack, toolState);
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
@@ -170,7 +170,7 @@ describe('EventRouter', () => {
     it('increases the eraser tool size when the mouse wheel is scrolled up', () => {
       const c = document.createElement('canvas');
       const layerStack = new CanvasLayerStack();
-      const toolState = new ToolState(layerStack);
+      const toolState = new ToolState();
       toolState.set(ToolId.Eraser);
       createEventRouter(c, layerStack, toolState);
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
@@ -184,7 +184,7 @@ describe('EventRouter', () => {
     it('decreases the eraser tool size when the mouse wheel is scrolled down', () => {
       const c = document.createElement('canvas');
       const layerStack = new CanvasLayerStack();
-      const toolState = new ToolState(layerStack);
+      const toolState = new ToolState();
       toolState.set(ToolId.Eraser);
       createEventRouter(c, layerStack, toolState);
       const initialSize = toolState.getCurrentTool().sizeSettings.get();
@@ -201,7 +201,7 @@ describe('EventRouter', () => {
     it('creates a PenCommand for each pointerdown event when the pen tool is selected', () => {
       const c = document.createElement('canvas');
       const layerStack = new CanvasLayerStack();
-      const toolState = new ToolState(layerStack);
+      const toolState = new ToolState();
       toolState.set(ToolId.Pen);
       const router = createEventRouter(c, layerStack, toolState);
       c.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
@@ -275,8 +275,8 @@ describe('EventRouter', () => {
       const router = createEventRouter(
         baseCanvas,
         layerStack,
-        new ToolState(layerStack),
-        createBrushCursor(layerStack),
+        new ToolState(),
+        createBrushCursor(),
       );
       const ctx = layerCanvas.getContext('2d')!;
 
@@ -314,7 +314,7 @@ describe('EventRouter', () => {
     it('creates an EraserCommand for each pointerdown event when the eraser tool is selected', () => {
       const c = document.createElement('canvas');
       const layerStack = new CanvasLayerStack();
-      const toolState = new ToolState(layerStack);
+      const toolState = new ToolState();
       toolState.set(ToolId.Eraser);
       const router = createEventRouter(c, layerStack, toolState);
       c.dispatchEvent(createPointerEvent('pointerdown', { x: 0, y: 0 }));
@@ -335,8 +335,8 @@ describe('EventRouter', () => {
       createEventRouter(
         baseCanvas,
         layerStack,
-        new ToolState(layerStack),
-        createBrushCursor(layerStack),
+        new ToolState(),
+        createBrushCursor(),
       );
       const ctx = layerCanvas.getContext('2d')!;
       ctx.canvas.width = 100;
@@ -366,7 +366,7 @@ describe('EventRouter', () => {
     it('updates the brush cursor position when the mouse is moved with the pen tool selected', () => {
       const c = document.createElement('canvas');
       const layerStack = new CanvasLayerStack();
-      const toolState = new ToolState(layerStack);
+      const toolState = new ToolState();
       toolState.set(ToolId.Pen);
 
       const brushCursor = new BrushCursor(new Container(), toolState);
@@ -383,8 +383,7 @@ describe('EventRouter', () => {
 
     // ツールのサイズを変更すると、ブラシカーソルのサイズも変化する
     it('updates the brush cursor size when the tool size is changed', () => {
-      const layerStack = new CanvasLayerStack();
-      const toolState = new ToolState(layerStack);
+      const toolState = new ToolState();
       toolState.set(ToolId.Pen);
       const brushCursor = new BrushCursor(new Container(), toolState);
 
@@ -424,8 +423,8 @@ describe('EventRouter', () => {
       createEventRouter(
         baseCanvas,
         layerStack,
-        new ToolState(layerStack),
-        createBrushCursor(layerStack),
+        new ToolState(),
+        createBrushCursor(),
       );
 
       window.dispatchEvent(new KeyboardEvent('keydown', { key: '2' }));

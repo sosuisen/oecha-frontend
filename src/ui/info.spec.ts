@@ -11,7 +11,7 @@ describe('info', () => {
   it('should be show on the screen', () => {
     const root = new Container();
     const layerStack = new CanvasLayerStack();
-    const info = new Info(root, new ToolState(layerStack), layerStack);
+    const info = new Info(root, new ToolState(), layerStack);
     info.show();
     expect(root.children.length).toBe(1);
   });
@@ -20,7 +20,7 @@ describe('info', () => {
   it('should be able to change the text', () => {
     const root = new Container();
     const layerStack = new CanvasLayerStack();
-    const info = new Info(root, new ToolState(layerStack), layerStack);
+    const info = new Info(root, new ToolState(), layerStack);
     info.show();
     info.setText('New Info');
     const text = root.children[0] as Text;
@@ -31,7 +31,7 @@ describe('info', () => {
   it('should update the text when the tool state changes', () => {
     const root = new Container();
     const layerStack = new CanvasLayerStack();
-    const toolState = new ToolState(layerStack);
+    const toolState = new ToolState();
     toolState.set(ToolId.Pen);
     const info = new Info(root, toolState, layerStack);
     info.show();
@@ -49,7 +49,7 @@ describe('info', () => {
   it('shows the current layer name before the tool info', () => {
     const root = new Container();
     const layerStack = new CanvasLayerStack();
-    const info = new Info(root, new ToolState(layerStack), layerStack);
+    const info = new Info(root, new ToolState(), layerStack);
     info.show();
     const text = root.children[0] as Text;
     expect(text.text).toBe('Layer 01 [Pen] 2px');
@@ -59,7 +59,7 @@ describe('info', () => {
   it('updates the layer name when the current layer changes', () => {
     const root = new Container();
     const layerStack = new CanvasLayerStack();
-    const info = new Info(root, new ToolState(layerStack), layerStack);
+    const info = new Info(root, new ToolState(), layerStack);
     info.show();
     const text = root.children[0] as Text;
 
