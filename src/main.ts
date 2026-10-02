@@ -34,7 +34,6 @@ const setRgbColor = (
   const b = parseInt(blue) || 0;
   const color = (r << 16) | (g << 8) | b;
   toolState.setCurrentColor(color);
-  toolState.setCurrentColor(color);
 };
 
 (async () => {
@@ -79,6 +78,7 @@ const setRgbColor = (
   app.stage.addChild(brushCursorContainer);
 
   const colorContainer = new Container();
+  colorContainer.eventMode = 'static';
   colorContainer.position.set(300, 10);
   app.stage.addChild(colorContainer);
   const rInput = createColorInput();
