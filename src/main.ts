@@ -23,6 +23,20 @@ const createColorInput = () => {
   });
 };
 
+const setRgbColor = (
+  toolState: ToolState,
+  red: string,
+  green: string,
+  blue: string,
+) => {
+  const r = parseInt(red) || 0;
+  const g = parseInt(green) || 0;
+  const b = parseInt(blue) || 0;
+  const color = (r << 16) | (g << 8) | b;
+  toolState.setCurrentColor(color);
+  toolState.setCurrentColor(color);
+};
+
 (async () => {
   const app = new Application();
   await app.init({
@@ -68,11 +82,24 @@ const createColorInput = () => {
   colorContainer.position.set(300, 10);
   app.stage.addChild(colorContainer);
   const rInput = createColorInput();
-  const gInput = createColorInput();
-  const bInput = createColorInput();
+  rInput.value = '0';
   rInput.x = 10;
+  rInput.onChange.connect(text => {
+    setRgbColor(toolState, text, gInput.value, bInput.value);
+  });
+  const gInput = createColorInput();
+  gInput.value = '0';
   gInput.x = 70;
+  gInput.onChange.connect(text => {
+    setRgbColor(toolState, rInput.value, text, bInput.value);
+  });
+  const bInput = createColorInput();
+  bInput.value = '0';
   bInput.x = 130;
+  bInput.onChange.connect(text => {
+    setRgbColor(toolState, rInput.value, gInput.value, text);
+  });
+
   colorContainer.addChild(rInput);
   colorContainer.addChild(gInput);
   colorContainer.addChild(bInput);

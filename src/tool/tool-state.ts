@@ -26,6 +26,7 @@ export class ToolState extends EventEmitter<ToolStateEvents> {
         this.emit('change', { tool: this.currentTool, size }),
       );
     }
+    this.setCurrentColor(ToolState.INITIAL_COLOR);
   }
 
   get(): ToolId {
