@@ -1,6 +1,5 @@
 # ペンの色を変える
 - [ ] R,G,Bのテキストフィールドに直接値入力
-- [ ] カラーピッカーが常時開いている
 
 # TextureSurface
 - [ ] TextureSurfaceのテストを書く（PixiJS 8.20のCanvasRendererを使う）。
