@@ -11,6 +11,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@pixi/ui": "^2.4.1",
     "pixi.js": "^8.8.1"
   },
   "devDependencies": {

@@ -1,4 +1,5 @@
-import { Application, Container, Sprite } from 'pixi.js';
+import { Application, Container, Graphics, Sprite } from 'pixi.js';
+import { Input } from '@pixi/ui';
 import { EventRouter } from './ui/event-router';
 import { TextureSurface } from './layer/texture-surface';
 import { DEFAULT_BACKGROUND_COLOR, DEFAULT_CANVAS_SIZE } from './ui/background';
@@ -7,6 +8,20 @@ import { ToolState } from './tool/tool-state';
 import { BrushCursor } from './ui/brush-cursor';
 import { TextureLayerStack } from './layer/texture-layer-stack';
 import { TextureLayer } from './layer/texture-layer';
+
+const createColorInput = () => {
+  return new Input({
+    bg: new Graphics()
+      .roundRect(0, 0, 50, 30, 3)
+      .fill(0xffffff)
+      .stroke({ width: 1, color: 0x606060 }),
+    textStyle: { fill: 0x000000, fontSize: 20 },
+    padding: [5, 10, 5, 0],
+    align: 'center',
+    maxLength: 3,
+    addMask: true,
+  });
+};
 
 (async () => {
   const app = new Application();
@@ -48,5 +63,19 @@ import { TextureLayer } from './layer/texture-layer';
   info.show();
 
   app.stage.addChild(brushCursorContainer);
+
+  const colorContainer = new Container();
+  colorContainer.position.set(300, 10);
+  app.stage.addChild(colorContainer);
+  const rInput = createColorInput();
+  const gInput = createColorInput();
+  const bInput = createColorInput();
+  rInput.x = 10;
+  gInput.x = 70;
+  bInput.x = 130;
+  colorContainer.addChild(rInput);
+  colorContainer.addChild(gInput);
+  colorContainer.addChild(bInput);
+
   brushCursor.show();
 })();
