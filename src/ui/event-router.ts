@@ -8,6 +8,8 @@ import { ClearCommand } from '../command/clear-command';
 import { Command } from '../command/command';
 import { LayerStack } from '../layer/layer-stack';
 
+export type PickColorFunction = (x: number, y: number) => number | null;
+
 export class EventRouter {
   private readonly canvas: HTMLCanvasElement;
   private lastPoint: { x: number; y: number } | null = null;
@@ -78,7 +80,7 @@ export class EventRouter {
     layerStack: LayerStack,
     toolState: ToolState,
     brushCursor: BrushCursor,
-    pickColor: (x: number, y: number) => number | null,
+    pickColor: PickColorFunction,
   ) {
     this.layerStack = layerStack;
     this.canvas = canvas;
