@@ -45,8 +45,15 @@ function createEventRouter(
   layerStack: CanvasLayerStack = new CanvasLayerStack(),
   toolState: ToolState = new ToolState(),
   brushCursor: BrushCursor = createBrushCursor(),
+  pickColor: (x: number, y: number) => number | null = () => null,
 ): EventRouter {
-  const router = new EventRouter(canvas, layerStack, toolState, brushCursor);
+  const router = new EventRouter(
+    canvas,
+    layerStack,
+    toolState,
+    brushCursor,
+    pickColor,
+  );
   routers.push(router);
   return router;
 }
@@ -155,6 +162,30 @@ describe('EventRouter', () => {
       });
       window.dispatchEvent(altKeyUpEvent);
       expect(router.isColorPickingMode()).toBe(false);
+    });
+
+    // カラーピッキングモード中にクリックすると、注入したカラーピッカー関数の返す色が現在色になる。nullのときは変わらない。
+    it('sets the current color to the color returned by the injected color picker function when clicked in color picking mode', () => {
+      const c = document.createElement('canvas');
+      const toolState = new ToolState();
+      const pickColor = (x: number, y: number) =>
+        x === 10 && y === 20 ? 0x123456 : null;
+      createEventRouter(
+        c,
+        new CanvasLayerStack(),
+        toolState,
+        createBrushCursor(),
+        pickColor,
+      );
+
+      window.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Alt', altKey: true }),
+      );
+      c.dispatchEvent(createPointerEvent('pointerdown', { x: 10, y: 20 }));
+      expect(toolState.getCurrentColor()).toBe(0x123456);
+
+      c.dispatchEvent(createPointerEvent('pointerdown', { x: 30, y: 40 }));
+      expect(toolState.getCurrentColor()).toBe(0x123456);
     });
   });
 

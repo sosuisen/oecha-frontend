@@ -78,6 +78,7 @@ export class EventRouter {
     layerStack: LayerStack,
     toolState: ToolState,
     brushCursor: BrushCursor,
+    pickColor: (x: number, y: number) => number | null,
   ) {
     this.layerStack = layerStack;
     this.canvas = canvas;
@@ -86,8 +87,7 @@ export class EventRouter {
     this.brushCursor = brushCursor;
     this.canvas.addEventListener('pointerdown', e => {
       if (this.colorPickingMode) {
-        const currentLayer = this.getCurrentLayer();
-        const color = currentLayer.getColorAt(e.clientX, e.clientY);
+        const color = pickColor(e.clientX, e.clientY);
         if (color !== null) {
           this.toolState.setCurrentColor(color);
         }

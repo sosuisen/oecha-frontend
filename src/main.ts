@@ -40,7 +40,11 @@ import { TextureLayer } from './layer/texture-layer';
   const toolState = new ToolState();
   const brushCursorContainer = new Container();
   const brushCursor = new BrushCursor(brushCursorContainer, toolState);
-  new EventRouter(app.canvas, layerStack, toolState, brushCursor);
+  const pickColor = (x: number, y: number): number | null => {
+    const currentLayer = layerStack.getCurrentLayer();
+    return currentLayer.getColorAt(x, y);
+  };
+  new EventRouter(app.canvas, layerStack, toolState, brushCursor, pickColor);
 
   app.stage.addChild(brushCursorContainer);
 
