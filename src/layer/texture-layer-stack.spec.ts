@@ -25,6 +25,13 @@ describe('TextureLayerStack', () => {
     expect(layerStack.getLayers().length).toBe(2);
   });
 
+  // 全レイヤーを子として持つコンテナーを返す
+  it('returns a container with all layers as children', () => {
+    const layerStack = createLayerStack();
+    const container = layerStack.getContainer();
+    expect(container.children.length).toBe(2);
+  });
+
   // select すると、選んだレイヤーを引数にして change イベントが発火する
   it('emits a change event with the selected layer when select is called', () => {
     const layerStack = createLayerStack();

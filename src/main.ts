@@ -7,6 +7,7 @@ import { ToolState } from './tool/tool-state';
 import { BrushCursor } from './ui/brush-cursor';
 import { TextureLayerStack } from './layer/texture-layer-stack';
 import { TextureLayer } from './layer/texture-layer';
+import { CompositeColorPicker } from './layer/composite-color-picker';
 
 (async () => {
   const app = new Application();
@@ -33,18 +34,19 @@ import { TextureLayer } from './layer/texture-layer';
       new Sprite(surface.getTexture()),
     );
   });
-  layerStack.getLayers().forEach(layer => {
-    app.stage.addChild(layer.layerSprite);
-  });
+  app.stage.addChild(layerStack.getContainer());
 
   const toolState = new ToolState();
   const brushCursorContainer = new Container();
   const brushCursor = new BrushCursor(brushCursorContainer, toolState);
-  const pickColor = (x: number, y: number): number | null => {
-    const currentLayer = layerStack.getCurrentLayer();
-    return currentLayer.getColorAt(x, y);
-  };
-  new EventRouter(app.canvas, layerStack, toolState, brushCursor, pickColor);
+  const compositeColorPicker = new CompositeColorPicker(
+    app,
+    DEFAULT_BACKGROUND_COLOR,
+    layerStack.getContainer(),
+  );
+  new EventRouter(app.canvas, layerStack, toolState, brushCursor, (x, y) =>
+    compositeColorPicker.getColorAt(x, y),
+  );
 
   app.stage.addChild(brushCursorContainer);
 
