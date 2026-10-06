@@ -12,7 +12,7 @@
 
 # TextureSurface
 - [ ] TextureSurfaceのテストを書く（PixiJS 8.20のCanvasRendererを使う）。
-    - [ ] spike: jsdom上で `app.init({ preference: 'canvas', autoStart: false })` が通るか確認する。
+    - [x] spike: jsdom上で `app.init({ preference: 'canvas', autoStart: false })` が通るか確認する。
     - [ ] `src/layer/texture-surface.spec.ts` を書く。`renderer.extract.pixels()` で色を確認する。
       - Graphicsは座標に0.5を足さない。1pxの線は半透明になりうるので、太い線か中央付近のピクセルを見る。
       - afterEachで `app.destroy()` を呼ぶ。
