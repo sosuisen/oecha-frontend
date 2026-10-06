@@ -27,6 +27,7 @@ export default tseslint.config(
         { accessibility: 'no-public' },
       ],
       '@typescript-eslint/prefer-readonly': 'error',
+      '@typescript-eslint/unbound-method': 'error',
     },
   },
 );
