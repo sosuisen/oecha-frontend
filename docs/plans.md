@@ -5,7 +5,7 @@
 - [x] Altキー押下中は一時的にカラーピックモード
 - [x] カラーピックした色を、RGBフィールドに反映させる
 - [x] カラーピック関数をEventRouterのコンストラクタで注入
-- [ ] カラーピックは、合成後のレイヤー色からとること（いまは現在のレイヤーの色を取っている）
+- [x] カラーピックは、合成後のレイヤー色からとること（いまは現在のレイヤーの色を取っている）
 - [x] カラーピックモード中にクリックすると現在色を変更
 - [ ] スポイトツールの選択
   
@@ -16,7 +16,7 @@
     - [ ] `src/layer/texture-surface.spec.ts` を書く。`renderer.extract.pixels()` で色を確認する。
       - Graphicsは座標に0.5を足さない。1pxの線は半透明になりうるので、太い線か中央付近のピクセルを見る。
       - afterEachで `app.destroy()` を呼ぶ。
-    - [ ] canvas用Applicationを作るヘルパーを `src/testing/` に置く。
+    - [x] canvas用Applicationを作るヘルパーを `src/testing/` に置く。
     - `src/testing/canvas-surface.ts` は軽いフェイクとして残す。
 
 # main.ts
